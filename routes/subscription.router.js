@@ -1,9 +1,8 @@
 import { Router } from "express";
+import { getSubscriptions } from "../controllers/subscription.controller.js";
 
 const subscriptionRoutes = Router();
 
-subscriptionRoutes.get("/", (req, res) => {
-    res.send("Hello World");
-});
+subscriptionRoutes.get("/", getSubscriptions);
 
 export default subscriptionRoutes;
