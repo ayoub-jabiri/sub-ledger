@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 
 // Internal Modules
 import { connectDb } from "./config/db.js";
+import userRoutes from "./routes/user.router.js";
 import subscriptionRoutes from "./routes/subscription.router.js";
 
 // 2. Main Settings:
@@ -23,6 +24,7 @@ connectDb(DB_URL);
 
 app.use(express.json());
 
+app.use("/users", userRoutes);
 app.use("/subscriptions", subscriptionRoutes);
 
 app.listen(PORT, () => {

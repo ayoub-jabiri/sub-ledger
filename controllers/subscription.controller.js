@@ -1,3 +1,3 @@
-export const getSubscriptions = (req, res) => {
+export const getSubscriptions = async (req, res) => {
     res.send("Hello World!");
 };
