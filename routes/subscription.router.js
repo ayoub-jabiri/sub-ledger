@@ -2,10 +2,14 @@
 import { Router } from "express";
 
 // Internal Modules
-import { getSubscriptions } from "../controllers/subscription.controller.js";
+import {
+    getSubscriptions,
+    addSubscription,
+} from "../controllers/subscription.controller.js";
 
 const subscriptionRoutes = Router();
 
 subscriptionRoutes.get("/", getSubscriptions);
+subscriptionRoutes.post("/", addSubscription);
 
 export default subscriptionRoutes;
