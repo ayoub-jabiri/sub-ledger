@@ -2,10 +2,11 @@
 import { Router } from "express";
 
 // Internal Modules
-import { getUsers } from "../controllers/user.controller.js";
+import { getUsers, registerUser } from "../controllers/user.controller.js";
 
 const userRoutes = Router();
 
 userRoutes.get("/", getUsers);
+userRoutes.post("/register", registerUser);
 
 export default userRoutes;
