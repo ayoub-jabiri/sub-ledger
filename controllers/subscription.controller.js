@@ -5,6 +5,22 @@ import { errorResponse } from "../utils/error.response.js";
 
 export const getSubscriptions = async (req, res) => {
     try {
+        const authHeader = req.headers["authorization"];
+        const token = authHeader && authHeader.split(" ")[1];
+
+        jwt.verify(
+            token,
+            process.env.ACCESS_TOKEN_SECRET,
+            async (error, user) => {
+                if (error) return res.status(403).send();
+
+                // Add a new subscription
+                const sub = await Subscription.find({ userId: user._id });
+
+                res.status(201).json(sub);
+            }
+        );
+
         const subs = await Subscription.find({});
 
         res.status(201).json(subs);
@@ -19,8 +35,6 @@ export const addSubscription = async (req, res) => {
     try {
         const authHeader = req.headers["authorization"];
         const token = authHeader && authHeader.split(" ")[1];
-
-        console.log(token);
 
         jwt.verify(
             token,
