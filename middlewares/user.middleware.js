@@ -1,7 +1,28 @@
 import bcrypt from "bcrypt";
+import { body, validationResult } from "express-validator";
 
 import User from "../models/user.schema.js";
 import { errorResponse } from "../utils/error.response.js";
+
+export const subValidationRules = [
+    body("name").notEmpty().withMessage("The name is required"),
+    body("email").isEmail().withMessage("The email must be a valide email"),
+    body("password").notEmpty().withMessage("The password is required"),
+    body("role")
+        .isIn(["user", "admin"])
+        .withMessage(
+            "The role is required and must be either 'user' or 'admin'"
+        ),
+];
+
+export const dataValidation = (req, res, next) => {
+    const validation = validationResult(req);
+
+    if (!validation.isEmpty())
+        return res.status(400).json({ errors: validation.errors });
+
+    next();
+};
 
 export const registerCheck = async (req, res, next) => {
     const { email } = req.body;
@@ -10,7 +31,7 @@ export const registerCheck = async (req, res, next) => {
 
         // Check if the email is already taken
         if (user.length > 0)
-            return errorResponse(res, 404, "The email is already taken!");
+            return errorResponse(res, 400, "The email is already taken!");
 
         next();
     } catch (error) {

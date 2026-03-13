@@ -8,6 +8,7 @@ const subSchema = new Schema({
     price: {
         type: Number,
         required: true,
+        min: 1,
     },
     billingCycle: {
         type: String,

@@ -7,12 +7,23 @@ import {
     registerUser,
     login,
 } from "../controllers/user.controller.js";
-import { registerCheck, loginCheck } from "../middlewares/user.middleware.js";
+import {
+    subValidationRules,
+    dataValidation,
+    registerCheck,
+    loginCheck,
+} from "../middlewares/user.middleware.js";
 
 const userRoutes = Router();
 
 userRoutes.get("/", getUsers);
-userRoutes.post("/register", registerCheck, registerUser);
+userRoutes.post(
+    "/register",
+    subValidationRules,
+    dataValidation,
+    registerCheck,
+    registerUser
+);
 userRoutes.post("/login", loginCheck, login);
 
 export default userRoutes;
