@@ -8,7 +8,7 @@ import {
     login,
 } from "../controllers/user.controller.js";
 import {
-    subValidationRules,
+    userValidationRules,
     dataValidation,
     registerCheck,
     loginCheck,
@@ -19,7 +19,7 @@ const userRoutes = Router();
 userRoutes.get("/", getUsers);
 userRoutes.post(
     "/register",
-    subValidationRules,
+    userValidationRules,
     dataValidation,
     registerCheck,
     registerUser

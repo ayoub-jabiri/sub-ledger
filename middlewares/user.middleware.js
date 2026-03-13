@@ -4,7 +4,7 @@ import { body, validationResult } from "express-validator";
 import User from "../models/user.schema.js";
 import { errorResponse } from "../utils/error.response.js";
 
-export const subValidationRules = [
+export const userValidationRules = [
     body("name").notEmpty().withMessage("The name is required"),
     body("email").isEmail().withMessage("The email must be a valide email"),
     body("password").notEmpty().withMessage("The password is required"),

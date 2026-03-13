@@ -1,5 +1,7 @@
-import User from "../models/user.schema.js";
+import jwt from "jsonwebtoken";
+
 import Subscription from "../models/subscription.schema.js";
+import { errorResponse } from "../utils/error.response.js";
 
 export const getSubscriptions = async (req, res) => {
     try {
@@ -12,22 +14,33 @@ export const getSubscriptions = async (req, res) => {
 };
 
 export const addSubscription = async (req, res) => {
-    const { name, price, billingCycle, userId } = req.body;
+    const { name, price, billingCycle } = req.body;
 
     try {
-        // Get the user id
-        const user = await User.find({ _id: userId });
+        const authHeader = req.headers["authorization"];
+        const token = authHeader && authHeader.split(" ")[1];
 
-        // Add a new subscription
-        const sub = await Subscription.create({
-            name: name,
-            price: price,
-            billingCycle: billingCycle,
-            userId: user._id,
-        });
+        console.log(token);
 
-        res.status(201).json(sub);
+        jwt.verify(
+            token,
+            process.env.ACCESS_TOKEN_SECRET,
+            async (error, user) => {
+                if (error) return res.status(403).send();
+
+                // Add a new subscription
+                const sub = await Subscription.create({
+                    name,
+                    price,
+                    billingCycle,
+                    userId: user._id,
+                });
+
+                res.status(201).json(sub);
+            }
+        );
     } catch (e) {
         console.error(e.message);
+        errorResponse(res, 500, "An internal error");
     }
 };
