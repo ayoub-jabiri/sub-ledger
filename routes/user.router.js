@@ -7,12 +7,12 @@ import {
     registerUser,
     login,
 } from "../controllers/user.controller.js";
-import { loginCheck } from "../middlewares/user.middleware.js";
+import { registerCheck, loginCheck } from "../middlewares/user.middleware.js";
 
 const userRoutes = Router();
 
 userRoutes.get("/", getUsers);
-userRoutes.post("/register", registerUser);
+userRoutes.post("/register", registerCheck, registerUser);
 userRoutes.post("/login", loginCheck, login);
 
 export default userRoutes;
