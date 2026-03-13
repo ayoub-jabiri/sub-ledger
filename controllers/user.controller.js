@@ -1,4 +1,5 @@
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 import User from "../models/user.schema.js";
 import { errorResponse } from "../utils/error.response.js";
@@ -11,7 +12,7 @@ export const registerUser = async (req, res) => {
     const { name, email, password, role } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
     try {
-        const user = await User.create({
+        await User.create({
             name,
             email,
             password: hashedPassword,
@@ -21,6 +22,23 @@ export const registerUser = async (req, res) => {
         res.status(201).json({
             message: "The user register successfully!",
         });
+    } catch (error) {
+        console.error(error.message);
+        errorResponse(res, 500, "An internal error");
+    }
+};
+
+export const login = async (req, res) => {
+    const { email } = req.body;
+    try {
+        const user = await User.find({ email });
+
+        const accessToken = jwt.sign(
+            JSON.stringify(user[0]),
+            process.env.ACCESS_TOKEN_SECRET
+        );
+
+        res.json({ accessToken });
     } catch (error) {
         console.error(error.message);
         errorResponse(res, 500, "An internal error");
