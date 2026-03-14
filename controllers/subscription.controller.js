@@ -23,7 +23,7 @@ export const getSubscriptions = async (req, res) => {
 
         const subs = await Subscription.find({});
 
-        res.status(201).json(subs);
+        res.status(200).json(subs);
     } catch (e) {
         console.error(e.message);
     }
