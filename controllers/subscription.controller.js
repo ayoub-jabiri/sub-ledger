@@ -55,8 +55,24 @@ export const addSubscription = async (req, res) => {
     }
 };
 
-export const updateSubscription = (req, res) => {
-    res.json("hi");
+export const updateSubscription = async (req, res) => {
+    const { id } = req.params;
+    const { name, price, billingCycle } = req.body;
+
+    try {
+        const sub = await Subscription.findById(id);
+
+        sub.name = name;
+        sub.price = price;
+        sub.billingCycle = billingCycle;
+
+        await sub.save();
+
+        res.json(sub);
+    } catch (e) {
+        console.error(e.message);
+        errorResponse(res, 500, "An internal error");
+    }
 };
 
 export const deleteSubscription = (req, res) => {};
