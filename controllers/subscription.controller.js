@@ -75,4 +75,17 @@ export const updateSubscription = async (req, res) => {
     }
 };
 
-export const deleteSubscription = (req, res) => {};
+export const deleteSubscription = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        await Subscription.findByIdAndDelete(id);
+
+        res.json({
+            message: "The subscription has been deleted successfully",
+        });
+    } catch (e) {
+        console.error(e.message);
+        errorResponse(res, 500, "An internal error");
+    }
+};

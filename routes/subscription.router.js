@@ -21,7 +21,7 @@ subscriptionRoutes.use(authenticationCheck);
 
 subscriptionRoutes.get("/", getSubscriptions);
 subscriptionRoutes.post(
-    "/:id",
+    "/",
     subValidationRules,
     dataValidation,
     addSubscription
@@ -33,6 +33,6 @@ subscriptionRoutes.put(
     dataValidation,
     updateSubscription
 );
-subscriptionRoutes.delete("/", subCheck, deleteSubscription);
+subscriptionRoutes.delete("/:id", subCheck, deleteSubscription);
 
 export default subscriptionRoutes;
