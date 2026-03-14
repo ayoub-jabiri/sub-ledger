@@ -1,24 +1,12 @@
-import jwt from "jsonwebtoken";
-
 import Subscription from "../models/subscription.schema.js";
 import { errorResponse } from "../utils/error.response.js";
 
 export const getSubscriptions = async (req, res) => {
     try {
-        const authHeader = req.headers["authorization"];
-        const token = authHeader.split(" ")[1];
+        const sub = await Subscription.find({ userId: req.user._id });
 
-        jwt.verify(
-            token,
-            process.env.ACCESS_TOKEN_SECRET,
-            async (error, user) => {
-                if (error) return res.status(403).send();
-
-                const sub = await Subscription.find({ userId: user._id });
-
-                res.status(200).json(sub);
-            }
-        );
+        res.status(200).json(sub);
+        res.status(200).json();
     } catch (e) {
         console.error(e.message);
         errorResponse(res, 500, "An internal error");
@@ -29,26 +17,15 @@ export const addSubscription = async (req, res) => {
     const { name, price, billingCycle } = req.body;
 
     try {
-        const authHeader = req.headers["authorization"];
-        const token = authHeader && authHeader.split(" ")[1];
+        // Add a new subscription
+        const sub = await Subscription.create({
+            name,
+            price,
+            billingCycle,
+            userId: req.user._id,
+        });
 
-        jwt.verify(
-            token,
-            process.env.ACCESS_TOKEN_SECRET,
-            async (error, user) => {
-                if (error) return res.status(403).send();
-
-                // Add a new subscription
-                const sub = await Subscription.create({
-                    name,
-                    price,
-                    billingCycle,
-                    userId: user._id,
-                });
-
-                res.status(201).json(sub);
-            }
-        );
+        res.status(201).json(sub);
     } catch (e) {
         console.error(e.message);
         errorResponse(res, 500, "An internal error");

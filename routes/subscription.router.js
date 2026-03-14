@@ -12,12 +12,14 @@ import {
     subValidationRules,
     dataValidation,
     authenticationCheck,
+    authorizationCheck,
     subCheck,
 } from "../middlewares/subscription.middleware.js";
 
 const subscriptionRoutes = Router();
 
 subscriptionRoutes.use(authenticationCheck);
+subscriptionRoutes.use(authorizationCheck);
 
 subscriptionRoutes.get("/", getSubscriptions);
 subscriptionRoutes.post(
