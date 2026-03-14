@@ -9,9 +9,12 @@ import {
 import {
     subValidationRules,
     dataValidation,
+    authenticationCheck,
 } from "../middlewares/subscription.middleware.js";
 
 const subscriptionRoutes = Router();
+
+subscriptionRoutes.use(authenticationCheck);
 
 subscriptionRoutes.get("/", getSubscriptions);
 subscriptionRoutes.post(

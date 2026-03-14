@@ -1,5 +1,7 @@
 import { body, validationResult } from "express-validator";
 
+import { errorResponse } from "../utils/error.response.js";
+
 export const subValidationRules = [
     body("name").notEmpty().withMessage("The name is required"),
     body("price")
@@ -19,6 +21,20 @@ export const dataValidation = (req, res, next) => {
 
     if (!validation.isEmpty())
         return res.status(400).json({ errors: validation.errors });
+
+    next();
+};
+
+export const authenticationCheck = (req, res, next) => {
+    const authHeader = req.headers["authorization"];
+
+    if (!authHeader) {
+        return errorResponse(
+            res,
+            401,
+            "Access denied due to not being authenticated"
+        );
+    }
 
     next();
 };
