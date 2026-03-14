@@ -6,9 +6,7 @@ import { errorResponse } from "../utils/error.response.js";
 export const getSubscriptions = async (req, res) => {
     try {
         const authHeader = req.headers["authorization"];
-        const token = authHeader && authHeader.split(" ")[1];
-
-        // console.log(req.headers["authorization"]);
+        const token = authHeader.split(" ")[1];
 
         jwt.verify(
             token,
@@ -56,3 +54,9 @@ export const addSubscription = async (req, res) => {
         errorResponse(res, 500, "An internal error");
     }
 };
+
+export const updateSubscription = (req, res) => {
+    res.json("hi");
+};
+
+export const deleteSubscription = (req, res) => {};

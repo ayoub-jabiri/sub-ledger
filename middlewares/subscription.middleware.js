@@ -1,5 +1,7 @@
+import mongoose from "mongoose";
 import { body, validationResult } from "express-validator";
 
+import Subscription from "../models/subscription.schema.js";
 import { errorResponse } from "../utils/error.response.js";
 
 export const subValidationRules = [
@@ -37,4 +39,25 @@ export const authenticationCheck = (req, res, next) => {
     }
 
     next();
+};
+
+export const subCheck = async (req, res, next) => {
+    const { id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        errorResponse(res, 400, "Invalid ID format");
+    }
+
+    try {
+        const sub = await Subscription.find({ _id: id });
+
+        if (!sub.length) {
+            errorResponse(res, 404, "Subscription not found");
+        }
+
+        next();
+    } catch (e) {
+        console.error(e.message);
+        errorResponse(res, 500, "An internal error");
+    }
 };
