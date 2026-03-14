@@ -1,3 +1,4 @@
+import User from "../models/user.schema.js";
 import Subscription from "../models/subscription.schema.js";
 import { errorResponse } from "../utils/error.response.js";
 
@@ -60,6 +61,20 @@ export const deleteSubscription = async (req, res) => {
 
         res.json({
             message: "The subscription has been deleted successfully",
+        });
+    } catch (e) {
+        console.error(e.message);
+        errorResponse(res, 500, "An internal error");
+    }
+};
+
+export const adminstrativeRoute = async (req, res) => {
+    try {
+        const users = await User.find({});
+        const subscriptions = await Subscription.find({});
+        res.json({
+            users,
+            subscriptions,
         });
     } catch (e) {
         console.error(e.message);

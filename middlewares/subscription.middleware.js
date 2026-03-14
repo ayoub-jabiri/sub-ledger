@@ -74,3 +74,14 @@ export const subCheck = async (req, res, next) => {
         errorResponse(res, 500, "An internal error");
     }
 };
+
+export const adminCheck = (req, res, next) => {
+    if (req.user.role != "admin")
+        return errorResponse(
+            res,
+            403,
+            "This route is available only to the admins"
+        );
+
+    next();
+};

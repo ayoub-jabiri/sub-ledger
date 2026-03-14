@@ -7,6 +7,7 @@ import {
     addSubscription,
     updateSubscription,
     deleteSubscription,
+    adminstrativeRoute,
 } from "../controllers/subscription.controller.js";
 import {
     subValidationRules,
@@ -14,6 +15,7 @@ import {
     authenticationCheck,
     authorizationCheck,
     subCheck,
+    adminCheck,
 } from "../middlewares/subscription.middleware.js";
 
 const subscriptionRoutes = Router();
@@ -36,5 +38,6 @@ subscriptionRoutes.put(
     updateSubscription
 );
 subscriptionRoutes.delete("/:id", subCheck, deleteSubscription);
+subscriptionRoutes.get("/admin", adminCheck, adminstrativeRoute);
 
 export default subscriptionRoutes;
