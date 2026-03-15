@@ -45,3 +45,7 @@ export const login = async (req, res) => {
         errorResponse(res, 500, "An internal error");
     }
 };
+
+export const getProfile = (req, res) => {
+    res.json(req.user);
+};

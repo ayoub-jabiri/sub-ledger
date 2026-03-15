@@ -6,6 +6,7 @@ import {
     getUsers,
     registerUser,
     login,
+    getProfile,
 } from "../controllers/user.controller.js";
 import {
     userValidationRules,
@@ -13,6 +14,10 @@ import {
     registerCheck,
     loginCheck,
 } from "../middlewares/user.middleware.js";
+import {
+    authenticationCheck,
+    authorizationCheck,
+} from "../middlewares/auth.middleware.js";
 
 const userRoutes = Router();
 
@@ -25,5 +30,6 @@ userRoutes.post(
     registerUser
 );
 userRoutes.post("/login", loginCheck, login);
+userRoutes.get("/profile", authenticationCheck, authorizationCheck, getProfile);
 
 export default userRoutes;
