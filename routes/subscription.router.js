@@ -12,11 +12,13 @@ import {
 import {
     subValidationRules,
     dataValidation,
+    subCheck,
+} from "../middlewares/subscription.middleware.js";
+import {
     authenticationCheck,
     authorizationCheck,
-    subCheck,
     adminCheck,
-} from "../middlewares/subscription.middleware.js";
+} from "../middlewares/auth.middleware.js";
 
 const subscriptionRoutes = Router();
 

@@ -28,32 +28,6 @@ export const dataValidation = (req, res, next) => {
     next();
 };
 
-export const authenticationCheck = (req, res, next) => {
-    const authHeader = req.headers["authorization"];
-
-    if (!authHeader) {
-        return errorResponse(
-            res,
-            401,
-            "Access denied due to not being authenticated"
-        );
-    }
-
-    next();
-};
-
-export const authorizationCheck = (req, res, next) => {
-    const authHeader = req.headers["authorization"];
-    const token = authHeader.split(" ")[1];
-
-    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (error, user) => {
-        if (error) return errorResponse(res, 403, "Invalid token");
-
-        req.user = user;
-        next();
-    });
-};
-
 export const subCheck = async (req, res, next) => {
     const { id } = req.params;
 
@@ -73,15 +47,4 @@ export const subCheck = async (req, res, next) => {
         console.error(e.message);
         errorResponse(res, 500, "An internal error");
     }
-};
-
-export const adminCheck = (req, res, next) => {
-    if (req.user.role != "admin")
-        return errorResponse(
-            res,
-            403,
-            "This route is available only to the admins"
-        );
-
-    next();
 };
