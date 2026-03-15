@@ -21,7 +21,7 @@ A FinTech startup backend application designed for managing digital subscription
 
 | Component | Technology |
 | :--- | :--- |
-| **Backend** | Node.js and Express.js |
+| **Backend** | Node.js, Express.js, MongoDB, Mongoose, express-validator, JWT, and bcrypt |
 
 ---
 
