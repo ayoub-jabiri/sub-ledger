@@ -1,8 +1,5 @@
 # 💳 SubLedger
 
-[![Trello](https://img.shields.io/badge/Trello-%23026AA7.svg?style=for-the-badge&logo=Trello&logoColor=white)](https://trello.com/invite/b/69149dad2e2b021024a407e7/ATTI11b4515c73c183fe6908a5f5f017a77e316F22F4/sub-ledger)
-[![Canva](https://img.shields.io/badge/Canva-%2300C4CC.svg?style=for-the-badge&logo=Canva&logoColor=white)](https://www.canva.com/design/DAG0oNOZpgM/kQuqwsmqQKU2cG9zbkPXvQ/edit?utm_content=DAG0oNOZpgM&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
-
 A FinTech startup backend application designed for managing digital subscriptions. SubLedger provides a secure API with robust authentication and role-based access control to track recurring services efficiently.
 
 ---
@@ -22,9 +19,9 @@ A FinTech startup backend application designed for managing digital subscription
 
 ## 🛠 Tech Stack
 
-| Component   | Technology             |
-| :---------- | :--------------------- |
-| **Backend** | Node.js and Express.js |
+| Component   | Technology                       |
+| :---------- | :------------------------------- |
+| **Backend** | Node.js, Express.js, and MongoDB |
 
 ---
 
