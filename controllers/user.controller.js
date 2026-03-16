@@ -4,10 +4,6 @@ import jwt from "jsonwebtoken";
 import User from "../models/user.schema.js";
 import { errorResponse } from "../utils/error.response.js";
 
-export const getUsers = async (req, res) => {
-    res.send("Hello World!??");
-};
-
 export const registerUser = async (req, res) => {
     const { name, email, password, role } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
