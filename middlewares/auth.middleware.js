@@ -1,5 +1,7 @@
+// External Modules
 import jwt from "jsonwebtoken";
 
+// Internal Modules
 import { errorResponse } from "../utils/error.response.js";
 
 export const authenticationCheck = (req, res, next) => {

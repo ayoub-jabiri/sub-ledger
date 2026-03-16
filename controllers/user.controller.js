@@ -1,6 +1,8 @@
+// External Modules
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
+// Internal Modules
 import User from "../models/user.schema.js";
 import { errorResponse } from "../utils/error.response.js";
 

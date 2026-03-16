@@ -1,6 +1,8 @@
+// External Modules
 import mongoose from "mongoose";
 import { body, validationResult } from "express-validator";
 
+// Internal Modules
 import Subscription from "../models/subscription.schema.js";
 import { errorResponse } from "../utils/error.response.js";
 
