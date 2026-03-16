@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 import { body, validationResult } from "express-validator";
-import jwt from "jsonwebtoken";
 
 import Subscription from "../models/subscription.schema.js";
 import { errorResponse } from "../utils/error.response.js";
