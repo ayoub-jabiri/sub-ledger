@@ -3,7 +3,6 @@ import { Router } from "express";
 
 // Internal Modules
 import {
-    getUsers,
     registerUser,
     login,
     getProfile,
@@ -21,7 +20,6 @@ import {
 
 const userRoutes = Router();
 
-userRoutes.get("/", getUsers);
 userRoutes.post(
     "/register",
     userValidationRules,

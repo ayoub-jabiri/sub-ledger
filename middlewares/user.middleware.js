@@ -1,6 +1,8 @@
+// External Modules
 import bcrypt from "bcrypt";
 import { body, validationResult } from "express-validator";
 
+// Internal Modules
 import User from "../models/user.schema.js";
 import { errorResponse } from "../utils/error.response.js";
 
