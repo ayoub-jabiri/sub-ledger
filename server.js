@@ -30,3 +30,5 @@ app.use("/subscriptions", subscriptionRoutes);
 app.listen(PORT, () => {
     console.log("The server is listening on port ", PORT);
 });
+
+export default app;
