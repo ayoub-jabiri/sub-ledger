@@ -15,19 +15,39 @@ afterAll(async () => {
     await mongoose.disconnect();
 });
 
-describe("User Auth", () => {
-    test("It should register the user successfully", async () => {
-        const fakeRegisterData = {
-            name: `name-${Date.now()}`,
-            email: `name-${Date.now()}@gmail.com`,
-            password: "123",
-            role: "user",
-        };
+describe("POST User Register", () => {
+    const fakeRegisterData = {
+        name: `name-${Date.now()}`,
+        email: `name-${Date.now()}@gmail.com`,
+        password: "123",
+        role: "user",
+    };
 
+    test("User Register", async () => {
         const res = await request(app)
             .post("/users/register")
             .send(fakeRegisterData);
 
         expect(res.statusCode).toBe(201);
+        expect(res.body).toHaveProperty(
+            "message",
+            "The user has been registered successfully!"
+        );
+    });
+
+    test("Email already exist", async () => {
+        // Essayer de créer un deuxième avec le même email
+        const response = await request(app)
+            .post("/users/register")
+            .send(fakeRegisterData);
+
+        // Code HTTP
+        expect(response.statusCode).toBe(400);
+
+        // Structure de la réponse
+        expect(response.body).toHaveProperty(
+            "message",
+            "The email is already taken!"
+        );
     });
 });
