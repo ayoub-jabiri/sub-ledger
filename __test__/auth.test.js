@@ -1,21 +1,16 @@
-import "dotenv/config";
 import request from "supertest";
 import app from "../app";
 import mongoose from "mongoose";
 
 beforeAll(async () => {
-    // console.log(process.env.DB_URL);
-
     await mongoose.connect("mongodb://127.0.0.1:27017/sub-ledger");
 });
 
 afterAll(async () => {
-    // console.log(process.env.DB_URL);
-
     await mongoose.disconnect();
 });
 
-describe("POST User Register", () => {
+describe("POST user register", () => {
     const fakeRegisterData = {
         name: `name-${Date.now()}`,
         email: `name-${Date.now()}@gmail.com`,
@@ -23,7 +18,7 @@ describe("POST User Register", () => {
         role: "user",
     };
 
-    test("User Register", async () => {
+    test("User register", async () => {
         const res = await request(app)
             .post("/users/register")
             .send(fakeRegisterData);
@@ -36,18 +31,44 @@ describe("POST User Register", () => {
     });
 
     test("Email already exist", async () => {
-        // Essayer de créer un deuxième avec le même email
         const response = await request(app)
             .post("/users/register")
             .send(fakeRegisterData);
 
-        // Code HTTP
         expect(response.statusCode).toBe(400);
-
-        // Structure de la réponse
         expect(response.body).toHaveProperty(
             "message",
             "The email is already taken!"
+        );
+    });
+});
+
+describe.skip("POST user login", () => {
+    const userData = {
+        email: "ahmed@gmail.com",
+        password: "123",
+    };
+
+    test("User login", async () => {
+        const response = await request(app).post("/users/login").send({
+            email: "ahmed@gmail.com",
+            password: "123",
+        });
+
+        expect(response.statusCode).toBe(200);
+        expect(response.body).toHaveProperty("accessToken");
+    });
+
+    test("Wrong password", async () => {
+        const response = await request(app).post("/users/login").send({
+            email: userData.email,
+            password: "wrongpassword",
+        });
+
+        expect(response.status).toBe(401);
+        expect(response.body).toHaveProperty(
+            "message",
+            "The password is not correct!"
         );
     });
 });

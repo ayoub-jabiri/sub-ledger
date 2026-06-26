@@ -34,7 +34,7 @@ export const login = async (req, res) => {
 
         const accessToken = jwt.sign(
             JSON.stringify(user[0]),
-            process.env.ACCESS_TOKEN_SECRET
+            process.env.ACCESS_TOKEN_SECRET || "fb433489a7e83057f6e"
         );
 
         res.json({ accessToken });
