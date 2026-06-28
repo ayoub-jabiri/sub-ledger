@@ -2,6 +2,8 @@ import request from "supertest";
 import app from "../app";
 import mongoose from "mongoose";
 
+const token = process.env.TESTING_TOKEN;
+
 beforeAll(async () => {
     await mongoose.connect("mongodb://127.0.0.1:27017/sub-ledger");
 });
@@ -10,7 +12,7 @@ afterAll(async () => {
     await mongoose.disconnect();
 });
 
-describe("POST user register", () => {
+describe("User register", () => {
     const fakeRegisterData = {
         name: `name-${Date.now()}`,
         email: `name-${Date.now()}@gmail.com`,
@@ -43,7 +45,7 @@ describe("POST user register", () => {
     });
 });
 
-describe("POST user login", () => {
+describe("User login", () => {
     const fakeUserData = {
         name: `name-${Date.now()}`,
         email: `name-${Date.now()}@gmail.com`,
@@ -76,5 +78,16 @@ describe("POST user login", () => {
             "message",
             "The password is not correct!"
         );
+    });
+});
+
+describe("User profile", () => {
+    test("Get the logged in user Profile", async () => {
+        const res = await request(app)
+            .get("/users/profile")
+            .set("Authorization", `Bearer ${token}`);
+
+        expect(res.statusCode).toBe(200);
+        expect(res.body).toHaveProperty("_id");
     });
 });
