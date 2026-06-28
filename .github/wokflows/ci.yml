@@ -1,0 +1,18 @@
+on:
+    push:
+        branches:
+            - main
+    pull_request:
+        branches:
+            - main
+
+jobs:
+    test:
+        run_on: ubuntu-latest
+
+        steps:
+            - name: Checkout the code
+              uses: actions/checkout@v7.0.0
+
+            - name: Test the code
+              run: npm test
