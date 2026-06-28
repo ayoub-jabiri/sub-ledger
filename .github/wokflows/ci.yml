@@ -30,3 +30,7 @@ jobs:
 
             - name: Test the code
               run: npm test
+              env:
+                  PORT: 3000
+                  DB_URL: mongodb://localhost:27017/subledger
+                  ACCESS_TOKEN_SECRET: fb433489a7e8
