@@ -10,6 +10,12 @@ jobs:
     test:
         runs-on: ubuntu-latest
 
+        services:
+            mongodb:
+                image: mongo:6.0
+                ports:
+                    - 27017:27017
+
         steps:
             - name: Checkout/pull the code
               uses: actions/checkout@v7.0.0
@@ -24,3 +30,7 @@ jobs:
 
             - name: Test the code
               run: npm test
+              env:
+                  PORT: 3000
+                  DB_URL: mongodb://localhost:27017/subledger
+                  ACCESS_TOKEN_SECRET: fb433489a7e8

@@ -74,3 +74,21 @@ Elevated endpoints reserved for users with the `Admin` role.
 | <kbd>GET</kbd> | `/subscriptions/admin` | Global view of all system-wide subscriptions | Admin Only |
 
 ---
+
+### Run the application test
+
+When you're ready, start the application test by running:
+`npm test`.
+
+Tools uesd: Jest + Supertest
+
+---
+
+### Build and run the application (Docker usage)
+
+When you're ready, start the application by running:
+`docker compose up --build`.
+
+the application will be available at http://localhost:3000.
+
+---
