@@ -41,4 +41,20 @@ describe("Manage user subscription", () => {
 
         expect(res.body).toHaveProperty("_id");
     });
+
+    test("Update subscriptions", async () => {
+        const newSubs = await request(app)
+            .post("/subscriptions")
+            .send(fakeSubscriptionData)
+            .set("Authorization", `Bearer ${token}`);
+
+        const res = await request(app)
+            .put(`/subscriptions/${newSubs.body._id}`)
+            .send(fakeSubscriptionData)
+            .set("Authorization", `Bearer ${token}`);
+
+        expect(res.statusCode).toBe(200);
+
+        expect(res.body).toHaveProperty("_id");
+    });
 });
