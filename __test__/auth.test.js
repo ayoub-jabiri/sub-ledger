@@ -43,16 +43,22 @@ describe("POST user register", () => {
     });
 });
 
-describe.skip("POST user login", () => {
-    const userData = {
-        email: "ahmed@gmail.com",
+describe("POST user login", () => {
+    const fakeUserData = {
+        name: `name-${Date.now()}`,
+        email: `name-${Date.now()}@gmail.com`,
         password: "123",
+        role: "user",
     };
+
+    beforeEach(async () => {
+        await request(app).post("/users/register").send(fakeUserData);
+    });
 
     test("User login", async () => {
         const response = await request(app).post("/users/login").send({
-            email: "ahmed@gmail.com",
-            password: "123",
+            email: fakeUserData.email,
+            password: fakeUserData.password,
         });
 
         expect(response.statusCode).toBe(200);
@@ -61,7 +67,7 @@ describe.skip("POST user login", () => {
 
     test("Wrong password", async () => {
         const response = await request(app).post("/users/login").send({
-            email: userData.email,
+            email: fakeUserData.email,
             password: "wrongpassword",
         });
 
