@@ -13,14 +13,67 @@ afterAll(async () => {
     await mongoose.disconnect();
 });
 
-describe("GET user subscription", () => {
-    test("GET Subscriptions", async () => {
-        const response = await request(app)
+describe("Manage user subscription", () => {
+    const fakeSubscriptionData = {
+        name: `name-${Date.now()}`,
+        price: 100,
+        billingCycle: "monthly",
+        role: "user",
+    };
+
+    test("Get user subscriptions", async () => {
+        const res = await request(app)
             .get("/subscriptions")
             .set("Authorization", `Bearer ${token}`);
 
-        expect(response.statusCode).toBe(200);
+        expect(res.statusCode).toBe(200);
 
-        expect(Array.isArray(response.body)).toBe(true);
+        expect(Array.isArray(res.body)).toBe(true);
+    });
+
+    test("Add new subscriptions", async () => {
+        const res = await request(app)
+            .post("/subscriptions")
+            .send(fakeSubscriptionData)
+            .set("Authorization", `Bearer ${token}`);
+
+        expect(res.statusCode).toBe(201);
+
+        expect(res.body).toHaveProperty("_id");
+    });
+
+    test("Update subscriptions", async () => {
+        const newSubs = await request(app)
+            .post("/subscriptions")
+            .send(fakeSubscriptionData)
+            .set("Authorization", `Bearer ${token}`);
+
+        const res = await request(app)
+            .put(`/subscriptions/${newSubs.body._id}`)
+            .send(fakeSubscriptionData)
+            .set("Authorization", `Bearer ${token}`);
+
+        expect(res.statusCode).toBe(200);
+
+        expect(res.body).toHaveProperty("_id");
+    });
+
+    test("Delete subscriptions", async () => {
+        const newSubs = await request(app)
+            .post("/subscriptions")
+            .send(fakeSubscriptionData)
+            .set("Authorization", `Bearer ${token}`);
+
+        const res = await request(app)
+            .delete(`/subscriptions/${newSubs.body._id}`)
+            .send(fakeSubscriptionData)
+            .set("Authorization", `Bearer ${token}`);
+
+        expect(res.statusCode).toBe(200);
+
+        expect(res.body).toHaveProperty(
+            "message",
+            "The subscription has been deleted successfully"
+        );
     });
 });

@@ -23,8 +23,4 @@ app.use(express.json());
 app.use("/users", userRoutes);
 app.use("/subscriptions", subscriptionRoutes);
 
-app.get("/test", (req, res) => {
-    res.send("test");
-});
-
 export default app;
