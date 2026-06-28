@@ -80,7 +80,7 @@ Elevated endpoints reserved for users with the `Admin` role.
 When you're ready, start the application test by running:
 `npm test`.
 
-Tools ues: Jest + Supertest
+Tools uesd: Jest + Supertest
 
 ---
 
