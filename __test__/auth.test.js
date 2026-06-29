@@ -2,10 +2,21 @@ import request from "supertest";
 import app from "../app";
 import mongoose from "mongoose";
 
-const token = process.env.TESTING_TOKEN;
+let token = null;
 
 beforeAll(async () => {
     await mongoose.connect("mongodb://127.0.0.1:27017/sub-ledger");
+
+    const res = await request(app)
+        .post("/users/register")
+        .send({
+            name: `name-${Date.now()}`,
+            email: `name-${Date.now()}@gmail.com`,
+            password: "123",
+            role: "user",
+        });
+
+    token = res.body.accessToken;
 });
 
 afterAll(async () => {
@@ -24,6 +35,8 @@ describe("User register", () => {
         const res = await request(app)
             .post("/users/register")
             .send(fakeRegisterData);
+
+        console.log(token);
 
         expect(res.statusCode).toBe(201);
         expect(res.body).toHaveProperty(

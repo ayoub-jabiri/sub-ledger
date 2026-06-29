@@ -17,9 +17,15 @@ export const registerUser = async (req, res) => {
             role,
         });
 
+        const accessToken = jwt.sign(
+            JSON.stringify(user),
+            process.env.ACCESS_TOKEN_SECRET || "fb433489a7e83057f6e"
+        );
+
         res.status(201).json({
             message: "The user has been registered successfully!",
             user,
+            accessToken,
         });
     } catch (error) {
         console.error(error.message);
