@@ -27,9 +27,9 @@ export const login = async (req, res) => {
     const { email } = req.body;
 
     try {
-        const { accessToken } = await authService.login(email);
+        const data = await authService.login(email);
 
-        res.json({ accessToken });
+        res.json(data);
     } catch (error) {
         console.error(error.message);
         errorResponse(res, 500, "An internal error");

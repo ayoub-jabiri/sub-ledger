@@ -6,8 +6,8 @@ import User from "../models/user.schema.js";
 const JWT_SECRET = process.env.JWT_SECRET;
 
 const signAccessToken = (user) =>
-    jwt.sign(JSON.stringify(user), JWT_SECRET, {
-        expiresIn: "7d",
+    jwt.sign(user, JWT_SECRET, {
+        expiresIn: "15d",
     });
 
 export const registerUser = async ({ name, email, password, role }) => {
@@ -20,11 +20,20 @@ export const registerUser = async ({ name, email, password, role }) => {
         role,
     });
 
-    return { user, accessToken: signAccessToken(user) };
+    const newUser = user.toObject();
+    delete newUser.password;
+
+    return {
+        user: newUser,
+        accessToken: signAccessToken({ id: user._id, role: user.role }),
+    };
 };
 
 export const login = async (email) => {
     const user = await User.findOne({ email }).select("name email role");
 
-    return { accessToken: signAccessToken(user) };
+    return {
+        user,
+        accessToken: signAccessToken({ id: user._id, role: user.role }),
+    };
 };
