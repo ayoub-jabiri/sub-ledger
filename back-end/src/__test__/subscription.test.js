@@ -53,6 +53,20 @@ describe("Manage user subscription", () => {
         expect(res.body).toHaveProperty("_id");
     });
 
+    test("Accept decimal subscription prices", async () => {
+        const res = await request(app)
+            .post("/subscriptions")
+            .send({
+                ...fakeSubscriptionData,
+                name: `decimal-${Date.now()}`,
+                price: 10.99,
+            })
+            .set("Authorization", `Bearer ${token}`);
+
+        expect(res.statusCode).toBe(201);
+        expect(res.body.price).toBe(10.99);
+    });
+
     test("Update subscriptions", async () => {
         const newSubs = await request(app)
             .post("/subscriptions")

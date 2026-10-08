@@ -2,7 +2,7 @@ import Subscription from "../models/subscription.schema.js";
 
 export const getUserSubscriptions = (userId) => Subscription.find({ userId });
 
-export const createSubscription = (userId, { name, price, billingCycle }) =>
+export const createSubscription = ({ name, price, billingCycle, userId }) =>
     Subscription.create({ name, price, billingCycle, userId });
 
 export const updateSubscription = async (id, { name, price, billingCycle }) => {

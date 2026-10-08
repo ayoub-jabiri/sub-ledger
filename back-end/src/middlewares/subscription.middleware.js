@@ -11,8 +11,9 @@ export const subValidationRules = [
     body("price")
         .notEmpty()
         .withMessage("The price is required")
-        .isInt({ min: 0.1 })
-        .withMessage("The price must greater than 0"),
+        .isFloat({ min: 0.01 })
+        .withMessage("The price must be greater than 0")
+        .toFloat(),
     body("billingCycle")
         .isIn(["monthly", "yearly"])
         .withMessage(

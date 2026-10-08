@@ -35,7 +35,7 @@ export const adminCheck = (req, res, next) => {
         return errorResponse(
             res,
             403,
-            "This route is available only to the admins"
+            "You are not authorized to access this route"
         );
 
     next();

@@ -4,9 +4,7 @@ import { errorResponse } from "../utils/error.response.js";
 
 export const getSubscriptions = async (req, res) => {
     try {
-        const sub = await subscriptionService.getUserSubscriptions(
-            req.user._id
-        );
+        const sub = await subscriptionService.getUserSubscriptions(req.user.id);
 
         res.status(200).json(sub);
     } catch (e) {
@@ -19,10 +17,11 @@ export const addSubscription = async (req, res) => {
     const { name, price, billingCycle } = req.body;
 
     try {
-        const sub = await subscriptionService.createSubscription(req.user._id, {
+        const sub = await subscriptionService.createSubscription({
             name,
             price,
             billingCycle,
+            userId: req.user.id,
         });
 
         res.status(201).json(sub);

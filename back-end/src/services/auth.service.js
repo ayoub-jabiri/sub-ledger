@@ -37,3 +37,6 @@ export const login = async (email) => {
         accessToken: signAccessToken({ id: user._id, role: user.role }),
     };
 };
+
+export const getUserById = async (id) =>
+    await User.findById(id).select("name email role");

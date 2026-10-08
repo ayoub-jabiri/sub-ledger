@@ -36,6 +36,13 @@ export const login = async (req, res) => {
     }
 };
 
-export const getProfile = (req, res) => {
-    res.json(req.user);
+export const getProfile = async (req, res) => {
+    try {
+        const user = await authService.getUserById(req.user.id);
+
+        res.json(user);
+    } catch (error) {
+        console.error(error.message);
+        errorResponse(res, 500, "An internal error");
+    }
 };
