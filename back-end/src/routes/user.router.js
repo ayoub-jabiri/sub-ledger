@@ -5,6 +5,7 @@ import { Router } from "express";
 import {
     registerUser,
     login,
+    logout,
     getProfile,
 } from "../controllers/user.controller.js";
 import {
@@ -28,6 +29,7 @@ userRoutes.post(
     registerUser
 );
 userRoutes.post("/login", loginCheck, login);
+userRoutes.post("/logout", logout);
 userRoutes.get("/profile", authenticationCheck, authorizationCheck, getProfile);
 
 export default userRoutes;

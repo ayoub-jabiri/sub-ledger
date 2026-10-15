@@ -1,13 +1,14 @@
 import jwt from "jsonwebtoken";
 
 import { errorResponse } from "../utils/error.response.js";
+import { ACCESS_TOKEN_COOKIE } from "../utils/auth.cookie.js";
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
 export const authenticationCheck = (req, res, next) => {
-    const authHeader = req.headers["authorization"];
+    const token = req.cookies?.[ACCESS_TOKEN_COOKIE];
 
-    if (!authHeader) {
+    if (!token) {
         return errorResponse(
             res,
             401,
@@ -19,10 +20,17 @@ export const authenticationCheck = (req, res, next) => {
 };
 
 export const authorizationCheck = (req, res, next) => {
-    const authHeader = req.headers["authorization"];
-    const token = authHeader.split(" ")[1];
+    const token = req.cookies?.[ACCESS_TOKEN_COOKIE];
 
-    jwt.verify(token, JWT_SECRET, async (error, user) => {
+    if (!token) {
+        return errorResponse(
+            res,
+            401,
+            "Access denied due to not being authenticated"
+        );
+    }
+
+    jwt.verify(token, JWT_SECRET, (error, user) => {
         if (error) return errorResponse(res, 403, "Invalid token");
 
         req.user = user;

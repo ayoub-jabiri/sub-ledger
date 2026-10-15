@@ -3,21 +3,17 @@ import request from "supertest";
 import app from "../app";
 import mongoose from "mongoose";
 
-let token = null;
+const agent = request.agent(app);
 
 beforeAll(async () => {
     await mongoose.connect("mongodb://127.0.0.1:27017/sub-ledger");
 
-    const res = await request(app)
-        .post("/users/register")
-        .send({
-            name: `name-${Date.now()}`,
-            email: `name-${Date.now()}@gmail.com`,
-            password: "123",
-            role: "user",
-        });
-
-    token = res.body.accessToken;
+    await agent.post("/users/register").send({
+        name: `name-${Date.now()}`,
+        email: `name-${Date.now()}@gmail.com`,
+        password: "123",
+        role: "user",
+    });
 });
 
 afterAll(async () => {
@@ -33,70 +29,56 @@ describe("Manage user subscription", () => {
     };
 
     test("Get user subscriptions", async () => {
-        const res = await request(app)
-            .get("/subscriptions")
-            .set("Authorization", `Bearer ${token}`);
+        const response = await agent.get("/subscriptions");
 
-        expect(res.statusCode).toBe(200);
-
-        expect(Array.isArray(res.body)).toBe(true);
+        expect(response.statusCode).toBe(200);
+        expect(Array.isArray(response.body)).toBe(true);
     });
 
     test("Add new subscriptions", async () => {
-        const res = await request(app)
+        const response = await agent
             .post("/subscriptions")
-            .send(fakeSubscriptionData)
-            .set("Authorization", `Bearer ${token}`);
+            .send(fakeSubscriptionData);
 
-        expect(res.statusCode).toBe(201);
-
-        expect(res.body).toHaveProperty("_id");
+        expect(response.statusCode).toBe(201);
+        expect(response.body).toHaveProperty("_id");
     });
 
     test("Accept decimal subscription prices", async () => {
-        const res = await request(app)
-            .post("/subscriptions")
-            .send({
-                ...fakeSubscriptionData,
-                name: `decimal-${Date.now()}`,
-                price: 10.99,
-            })
-            .set("Authorization", `Bearer ${token}`);
+        const response = await agent.post("/subscriptions").send({
+            ...fakeSubscriptionData,
+            name: `decimal-${Date.now()}`,
+            price: 10.99,
+        });
 
-        expect(res.statusCode).toBe(201);
-        expect(res.body.price).toBe(10.99);
+        expect(response.statusCode).toBe(201);
+        expect(response.body.price).toBe(10.99);
     });
 
     test("Update subscriptions", async () => {
-        const newSubs = await request(app)
+        const newSubscription = await agent
             .post("/subscriptions")
-            .send(fakeSubscriptionData)
-            .set("Authorization", `Bearer ${token}`);
+            .send(fakeSubscriptionData);
 
-        const res = await request(app)
-            .put(`/subscriptions/${newSubs.body._id}`)
-            .send(fakeSubscriptionData)
-            .set("Authorization", `Bearer ${token}`);
+        const response = await agent
+            .put(`/subscriptions/${newSubscription.body._id}`)
+            .send(fakeSubscriptionData);
 
-        expect(res.statusCode).toBe(200);
-
-        expect(res.body).toHaveProperty("_id");
+        expect(response.statusCode).toBe(200);
+        expect(response.body).toHaveProperty("_id");
     });
 
     test("Delete subscriptions", async () => {
-        const newSubs = await request(app)
+        const newSubscription = await agent
             .post("/subscriptions")
-            .send(fakeSubscriptionData)
-            .set("Authorization", `Bearer ${token}`);
+            .send(fakeSubscriptionData);
 
-        const res = await request(app)
-            .delete(`/subscriptions/${newSubs.body._id}`)
-            .send(fakeSubscriptionData)
-            .set("Authorization", `Bearer ${token}`);
+        const response = await agent
+            .delete(`/subscriptions/${newSubscription.body._id}`)
+            .send(fakeSubscriptionData);
 
-        expect(res.statusCode).toBe(200);
-
-        expect(res.body).toHaveProperty(
+        expect(response.statusCode).toBe(200);
+        expect(response.body).toHaveProperty(
             "message",
             "The subscription has been deleted successfully"
         );

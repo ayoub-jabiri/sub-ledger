@@ -1,6 +1,7 @@
 // 1. Modules:
 // External Modules
 import express from "express";
+import cookieParser from "cookie-parser";
 
 // Internal Modules
 import userRoutes from "./routes/user.router.js";
@@ -16,6 +17,7 @@ const app = express();
 // 4. Server Set up
 
 app.use(express.json());
+app.use(cookieParser());
 
 app.use("/users", userRoutes);
 app.use("/subscriptions", subscriptionRoutes);

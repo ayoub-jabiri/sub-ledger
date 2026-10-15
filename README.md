@@ -44,6 +44,11 @@ A FinTech startup backend application designed for managing digital subscription
 
 The **SubLedger** API provides a collection of RESTful endpoints for managing users and digital subscriptions. All request and response bodies are in `JSON` format.
 
+Authentication is stored in an `HttpOnly` `accessToken` cookie after
+registration or login. Clients must not read or send the token through an
+`Authorization` header; browser clients should include credentials on
+cross-origin requests.
+
 ### 👤 User Management & Auth
 
 Endpoints for handling identity, authentication, and profile access.
@@ -51,7 +56,8 @@ Endpoints for handling identity, authentication, and profile access.
 | Method          | Endpoint          | Description                              | Auth    |
 | :-------------- | :---------------- | :--------------------------------------- | :------ |
 | <kbd>POST</kbd> | `/users/register` | Create a new user account                | Public  |
-| <kbd>POST</kbd> | `/users/login`    | Authenticate and receive an access token | Public  |
+| <kbd>POST</kbd> | `/users/login`    | Authenticate and set an HttpOnly access-token cookie | Public  |
+| <kbd>POST</kbd> | `/users/logout`   | Clear the authenticated user cookie       | Public  |
 | <kbd>GET</kbd>  | `/users/profile`  | Retrieve profile of the logged-in user   | Private |
 
 ### 📅 Subscription Operations

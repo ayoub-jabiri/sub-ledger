@@ -271,7 +271,6 @@ export default function RegisterPage() {
                         <label className="mt-1 flex min-h-11 cursor-pointer items-center gap-2.5 text-[13px] leading-5 text-[#6B7088]">
                             <input
                                 type="checkbox"
-                                defaultChecked
                                 className={`h-[18px] w-[18px] shrink-0 rounded border-[#E4E7EF] accent-[#7255D8] ${focusRing}`}
                             />
                             <span>

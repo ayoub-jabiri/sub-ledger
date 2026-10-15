@@ -1,22 +1,21 @@
+import "dotenv/config";
 import request from "supertest";
 import app from "../app";
 import mongoose from "mongoose";
 
-let token = null;
+const agent = request.agent(app);
 
 beforeAll(async () => {
     await mongoose.connect("mongodb://127.0.0.1:27017/sub-ledger");
 
-    const res = await request(app)
-        .post("/users/register")
-        .send({
-            name: `name-${Date.now()}`,
-            email: `name-${Date.now()}@gmail.com`,
-            password: "123",
-            role: "user",
-        });
+    const response = await agent.post("/users/register").send({
+        name: `name-${Date.now()}`,
+        email: `name-${Date.now()}@gmail.com`,
+        password: "123",
+        role: "user",
+    });
 
-    token = res.body.accessToken;
+    expect(response.headers["set-cookie"][0]).toMatch(/HttpOnly/i);
 });
 
 afterAll(async () => {
@@ -32,17 +31,17 @@ describe("User register", () => {
     };
 
     test("User register", async () => {
-        const res = await request(app)
+        const response = await request(app)
             .post("/users/register")
             .send(fakeRegisterData);
 
-        console.log(token);
-
-        expect(res.statusCode).toBe(201);
-        expect(res.body).toHaveProperty(
+        expect(response.statusCode).toBe(201);
+        expect(response.body).toHaveProperty(
             "message",
             "The user has been registered successfully!"
         );
+        expect(response.body).not.toHaveProperty("accessToken");
+        expect(response.headers["set-cookie"][0]).toMatch(/HttpOnly/i);
     });
 
     test("Email already exist", async () => {
@@ -77,7 +76,9 @@ describe("User login", () => {
         });
 
         expect(response.statusCode).toBe(200);
-        expect(response.body).toHaveProperty("accessToken");
+        expect(response.body).toHaveProperty("user");
+        expect(response.body).not.toHaveProperty("accessToken");
+        expect(response.headers["set-cookie"][0]).toMatch(/HttpOnly/i);
     });
 
     test("Wrong password", async () => {
@@ -96,11 +97,9 @@ describe("User login", () => {
 
 describe("User profile", () => {
     test("Get the logged in user Profile", async () => {
-        const res = await request(app)
-            .get("/users/profile")
-            .set("Authorization", `Bearer ${token}`);
+        const response = await agent.get("/users/profile");
 
-        expect(res.statusCode).toBe(200);
-        expect(res.body).toHaveProperty("_id");
+        expect(response.statusCode).toBe(200);
+        expect(response.body).toHaveProperty("_id");
     });
 });
