@@ -10,7 +10,6 @@ import {
     adminstrativeRoute,
 } from "../controllers/subscription.controller.js";
 import {
-    subValidationRules,
     dataValidation,
     subCheck,
 } from "../middlewares/subscription.middleware.js";
@@ -27,18 +26,11 @@ subscriptionRoutes.use(authenticationCheck);
 subscriptionRoutes.use(authorizationCheck);
 
 subscriptionRoutes.get("/", getSubscriptions);
-subscriptionRoutes.post(
-    "/",
-    requestBodyCheck,
-    subValidationRules,
-    dataValidation,
-    addSubscription
-);
+subscriptionRoutes.post("/", requestBodyCheck, dataValidation, addSubscription);
 subscriptionRoutes.put(
     "/:id",
     subCheck,
     requestBodyCheck,
-    subValidationRules,
     dataValidation,
     updateSubscription
 );

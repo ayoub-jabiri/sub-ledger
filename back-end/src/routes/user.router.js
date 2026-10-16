@@ -9,7 +9,6 @@ import {
     getProfile,
 } from "../controllers/user.controller.js";
 import {
-    userValidationRules,
     dataValidation,
     registerCheck,
     loginCheck,
@@ -21,13 +20,7 @@ import {
 
 const userRoutes = Router();
 
-userRoutes.post(
-    "/register",
-    userValidationRules,
-    dataValidation,
-    registerCheck,
-    registerUser
-);
+userRoutes.post("/register", dataValidation, registerCheck, registerUser);
 userRoutes.post("/login", loginCheck, login);
 userRoutes.post("/logout", logout);
 userRoutes.get("/profile", authenticationCheck, authorizationCheck, getProfile);

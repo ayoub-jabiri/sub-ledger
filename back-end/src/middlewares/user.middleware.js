@@ -1,28 +1,27 @@
 // External Modules
 import bcrypt from "bcrypt";
-import { body, validationResult } from "express-validator";
+import { z } from "zod";
 
 // Internal Modules
 import User from "../models/user.schema.js";
 import { errorResponse } from "../utils/error.response.js";
 
-export const userValidationRules = [
-    body("name").notEmpty().withMessage("The name is required"),
-    body("email").isEmail().withMessage("The email must be a valide email"),
-    body("password").notEmpty().withMessage("The password is required"),
-    body("role")
-        .isIn(["user", "admin"])
-        .withMessage(
-            "The role is required and must be either 'user' or 'admin'"
-        ),
-];
+const userSchema = z.object({
+    name: z.string().min(1, "The name is required"),
+    email: z.string().email("The email must be a valide email"),
+    password: z.string().min(1, "The password is required"),
+    role: z.enum(["user", "admin"], {
+        message: "The role is required and must be either 'user' or 'admin'",
+    }),
+});
 
 export const dataValidation = (req, res, next) => {
-    const validation = validationResult(req);
+    const validation = userSchema.safeParse(req.body);
 
-    if (!validation.isEmpty())
-        return res.status(400).json({ errors: validation.errors });
+    if (!validation.success)
+        return res.status(400).json({ errors: validation.error.issues });
 
+    req.body = validation.data;
     next();
 };
 

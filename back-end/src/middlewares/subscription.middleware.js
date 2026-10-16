@@ -1,32 +1,38 @@
 // External Modules
 import mongoose from "mongoose";
-import { body, validationResult } from "express-validator";
+import { z } from "zod";
 
 // Internal Modules
 import Subscription from "../models/subscription.schema.js";
 import { errorResponse } from "../utils/error.response.js";
 
-export const subValidationRules = [
-    body("name").notEmpty().withMessage("The name is required"),
-    body("price")
-        .notEmpty()
-        .withMessage("The price is required")
-        .isFloat({ min: 0.01 })
-        .withMessage("The price must be greater than 0")
-        .toFloat(),
-    body("billingCycle")
-        .isIn(["monthly", "yearly"])
-        .withMessage(
-            "The billing cycle is required and must be either 'monthly' or 'yearly'"
-        ),
-];
+const subscriptionSchema = z.object({
+    name: z.string().min(1, "The name is required"),
+    price: z.coerce.number().min(0.01, "The price must be greater than 0"),
+    billingCycle: z.enum(["monthly", "yearly"], {
+        message:
+            "The billing cycle is required and must be either 'monthly' or 'yearly'",
+    }),
+});
 
 export const dataValidation = (req, res, next) => {
-    const validation = validationResult(req);
+    const { name, price, billingCycle } = req.body;
 
-    if (!validation.isEmpty())
-        return res.status(400).json({ errors: validation.errors });
+    const validation = subscriptionSchema.safeParse({
+        name,
+        price,
+        billingCycle,
+    });
 
+    if (!validation.success)
+        return res
+            .status(400)
+            .json({
+                message: "Validation failed",
+                errors: validation.error.issues,
+            });
+
+    req.body = validation.data;
     next();
 };
 
