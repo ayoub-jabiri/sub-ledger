@@ -19,6 +19,7 @@ import {
     authorizationCheck,
     adminCheck,
 } from "../middlewares/auth.middleware.js";
+import { requestBodyCheck } from "../middlewares/global.middleware.js";
 
 const subscriptionRoutes = Router();
 
@@ -28,6 +29,7 @@ subscriptionRoutes.use(authorizationCheck);
 subscriptionRoutes.get("/", getSubscriptions);
 subscriptionRoutes.post(
     "/",
+    requestBodyCheck,
     subValidationRules,
     dataValidation,
     addSubscription
@@ -35,6 +37,7 @@ subscriptionRoutes.post(
 subscriptionRoutes.put(
     "/:id",
     subCheck,
+    requestBodyCheck,
     subValidationRules,
     dataValidation,
     updateSubscription

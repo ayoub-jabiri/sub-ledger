@@ -8,7 +8,15 @@ import {
 
 export const userRegister = createAsyncThunk(
     "user/register",
-    async (userData, { rejectWithValue }) => {
+    async (
+        userData: {
+            name: string;
+            email: string;
+            password: string;
+            passwordConfirm: string;
+        },
+        { rejectWithValue }
+    ) => {
         try {
             const response = await userRegisterService(userData);
             return response;
@@ -31,7 +39,10 @@ export const userRegister = createAsyncThunk(
 
 export const userLogin = createAsyncThunk(
     "user/login",
-    async (credentials, { rejectWithValue }) => {
+    async (
+        credentials: { email: string; password: string },
+        { rejectWithValue }
+    ) => {
         try {
             const response = await userLoginService(credentials);
 
