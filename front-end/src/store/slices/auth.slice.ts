@@ -5,6 +5,7 @@ import {
     userLogoutService,
     getUserProfileService,
 } from "../services/auth.services";
+import type { Credentials } from "../../types/auth.types";
 
 export const userRegister = createAsyncThunk(
     "user/register",
@@ -20,8 +21,8 @@ export const userRegister = createAsyncThunk(
         try {
             const response = await userRegisterService(userData);
             return response;
-        } catch (error) {
-            let currentError = {
+        } catch (error: unknown) {
+            const currentError = {
                 message: error.response?.data?.message || "An error occurred",
                 statusCode: error.response?.status,
             };
@@ -39,16 +40,13 @@ export const userRegister = createAsyncThunk(
 
 export const userLogin = createAsyncThunk(
     "user/login",
-    async (
-        credentials: { email: string; password: string },
-        { rejectWithValue }
-    ) => {
+    async (credentials: Credentials, { rejectWithValue }) => {
         try {
             const response = await userLoginService(credentials);
 
             return response;
-        } catch (error) {
-            let currentError = {
+        } catch (error: unknown) {
+            const currentError = {
                 message: error.response?.data?.message || "An error occurred",
                 statusCode: error.response?.status,
             };
@@ -70,8 +68,8 @@ export const userLogout = createAsyncThunk(
         try {
             const response = await userLogoutService();
             return response;
-        } catch (error) {
-            let currentError = {
+        } catch (error: unknown) {
+            const currentError = {
                 message: error.response?.data?.message || "An error occurred",
                 statusCode: error.response?.status,
             };
@@ -93,8 +91,8 @@ export const getUserProfile = createAsyncThunk(
         try {
             const response = await getUserProfileService();
             return response;
-        } catch (error) {
-            let currentError = {
+        } catch (error: unknown) {
+            const currentError = {
                 message: error.response?.data?.message || "An error occurred",
                 statusCode: error.response?.status,
             };

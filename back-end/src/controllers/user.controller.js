@@ -16,11 +16,7 @@ export const registerUser = async (req, res) => {
             role,
         });
 
-        res.cookie(
-            ACCESS_TOKEN_COOKIE,
-            accessToken,
-            accessTokenCookieOptions
-        );
+        res.cookie(ACCESS_TOKEN_COOKIE, accessToken, accessTokenCookieOptions);
 
         res.status(201).json({
             message: "The user has been registered successfully!",

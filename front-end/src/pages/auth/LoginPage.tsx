@@ -2,6 +2,9 @@ import { Diamond, Eye, EyeOff, Lock } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router";
 import CardStack from "../../components/auth/CardStack";
+import { userLogin } from "../../store/slices/auth.slice";
+import { useAppDispatch } from "../../hooks";
+import type { Credentials } from "../../types/auth.types";
 
 const focusRing =
     "focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-[#7255D8]/40";
@@ -29,11 +32,22 @@ function LogoMark({ className = "", size = 20 }) {
 }
 
 export default function LoginPage() {
+    const dispatch = useAppDispatch();
+
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+    const [credentials, setCredentials] = useState<Credentials>({
+        email: "",
+        password: "",
+    });
+
+    function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+        event.preventDefault();
+
+        dispatch(userLogin(credentials));
+    }
 
     return (
         <main className="flex min-h-[100dvh] bg-white text-[#171A2B] antialiased">
-            {/* Brand panel (desktop) */}
             <aside className="hidden w-[39%] shrink-0 flex-col bg-[#171A2B] p-[clamp(32px,3.1vw,48px)] lg:flex">
                 <div className="flex items-center gap-2 text-white">
                     <LogoMark className="text-[#B9A9F0]" size={18} />
@@ -78,7 +92,7 @@ export default function LoginPage() {
                         Sign in to your personal subscription workspace.
                     </p>
 
-                    <form className="mt-6">
+                    <form className="mt-6" onSubmit={handleSubmit}>
                         <div className="space-y-5">
                             <div>
                                 <label
@@ -88,10 +102,16 @@ export default function LoginPage() {
                                     Email address
                                 </label>
                                 <input
-                                    id="email"
                                     type="email"
                                     className={inputClass}
                                     placeholder="Enter your email"
+                                    value={credentials.email}
+                                    onChange={(e) =>
+                                        setCredentials({
+                                            ...credentials,
+                                            email: e.target.value,
+                                        })
+                                    }
                                 />
                             </div>
 
@@ -104,7 +124,6 @@ export default function LoginPage() {
                                 </label>
                                 <div className="relative">
                                     <input
-                                        id="password"
                                         type={
                                             isPasswordVisible
                                                 ? "text"
@@ -112,6 +131,13 @@ export default function LoginPage() {
                                         }
                                         className={`${inputClass} pr-12`}
                                         placeholder="Enter your password"
+                                        value={credentials.password}
+                                        onChange={(e) =>
+                                            setCredentials({
+                                                ...credentials,
+                                                password: e.target.value,
+                                            })
+                                        }
                                     />
                                     <button
                                         type="button"

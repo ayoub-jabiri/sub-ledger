@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { type AxiosResponse, type AxiosError } from "axios";
 import router from "../../routes/router";
 
 const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -10,10 +10,10 @@ const api = axios.create({
 });
 
 api.interceptors.response.use(
-    (response: axios.AxiosResponse) => {
+    (response: AxiosResponse) => {
         return response.data;
     },
-    (error: axios.AxiosError) => {
+    (error: AxiosError) => {
         console.error("Response error:", error.response);
 
         if (error.response && error.response.status === 401) {

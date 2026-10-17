@@ -9,19 +9,33 @@ import {
     getProfile,
 } from "../controllers/user.controller.js";
 import {
-    dataValidation,
+    registerDataValidation,
     registerCheck,
+    loginDataValidation,
     loginCheck,
 } from "../middlewares/user.middleware.js";
 import {
     authenticationCheck,
     authorizationCheck,
 } from "../middlewares/auth.middleware.js";
+import { requestBodyCheck } from "../middlewares/global.middleware.js";
 
 const userRoutes = Router();
 
-userRoutes.post("/register", dataValidation, registerCheck, registerUser);
-userRoutes.post("/login", loginCheck, login);
+userRoutes.post(
+    "/register",
+    requestBodyCheck,
+    registerDataValidation,
+    registerCheck,
+    registerUser
+);
+userRoutes.post(
+    "/login",
+    requestBodyCheck,
+    loginDataValidation,
+    loginCheck,
+    login
+);
 userRoutes.post("/logout", logout);
 userRoutes.get("/profile", authenticationCheck, authorizationCheck, getProfile);
 

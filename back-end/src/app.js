@@ -2,8 +2,8 @@
 // External Modules
 import express from "express";
 import cookieParser from "cookie-parser";
-import cors from "cors";
 import helmet from "helmet";
+import cors from "cors";
 import { rateLimit } from "express-rate-limit";
 
 // Internal Modules
@@ -20,9 +20,14 @@ if (process.env?.ENV !== "production") {
 
 const app = express();
 
-app.use(cors());
-
 app.use(helmet());
+
+app.use(
+    cors({
+        origin: "http://localhost:5173",
+        credentials: true,
+    })
+);
 
 if (process.env?.ENV === "production") {
     app.set("trust proxy", 1);
