@@ -2,6 +2,7 @@ import { Diamond, Eye, EyeOff, Lock } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router";
 import CardStack from "../../components/auth/CardStack";
+import type { RegisterCredentials } from "../../types/auth.types";
 
 const focusRing =
     "focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-[#7255D8]/40";
@@ -34,6 +35,13 @@ export default function RegisterPage() {
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
         useState(false);
+
+    const [userData, setUserData] = useState<RegisterCredentials>({
+        name: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+    });
 
     return (
         <main className="flex min-h-[100dvh] bg-white font-[Inter,system-ui,sans-serif] text-[#171A2B] antialiased">
@@ -90,10 +98,16 @@ export default function RegisterPage() {
                                     Full name
                                 </label>
                                 <input
-                                    id="name"
                                     type="text"
                                     className={inputClass}
                                     placeholder="Enter your full name"
+                                    value={userData.name}
+                                    onChange={(e) =>
+                                        setUserData({
+                                            ...userData,
+                                            name: e.target.value,
+                                        })
+                                    }
                                 />
                             </div>
 
@@ -102,11 +116,17 @@ export default function RegisterPage() {
                                     Email address
                                 </label>
                                 <input
-                                    id="email"
                                     type="email"
                                     autoComplete="email"
                                     className={inputClass}
                                     placeholder="Enter your email"
+                                    value={userData.email}
+                                    onChange={(e) =>
+                                        setUserData({
+                                            ...userData,
+                                            email: e.target.value,
+                                        })
+                                    }
                                 />
                             </div>
 
@@ -119,7 +139,6 @@ export default function RegisterPage() {
                                 </label>
                                 <div className="relative">
                                     <input
-                                        id="password"
                                         type={
                                             isPasswordVisible
                                                 ? "text"
@@ -127,6 +146,13 @@ export default function RegisterPage() {
                                         }
                                         className={`${inputClass} pr-12`}
                                         placeholder="Enter your password"
+                                        value={userData.password}
+                                        onChange={(e) =>
+                                            setUserData({
+                                                ...userData,
+                                                password: e.target.value,
+                                            })
+                                        }
                                     />
                                     <button
                                         type="button"
@@ -163,7 +189,6 @@ export default function RegisterPage() {
                                 </label>
                                 <div className="relative">
                                     <input
-                                        id="confirm"
                                         type={
                                             isConfirmPasswordVisible
                                                 ? "text"
@@ -171,6 +196,13 @@ export default function RegisterPage() {
                                         }
                                         className={`${inputClass} pr-12`}
                                         placeholder="Enter your password"
+                                        value={userData.confirmPassword}
+                                        onChange={(e) =>
+                                            setUserData({
+                                                ...userData,
+                                                confirmPassword: e.target.value,
+                                            })
+                                        }
                                     />
                                     <button
                                         type="button"

@@ -5,19 +5,11 @@ import {
     userLogoutService,
     getUserProfileService,
 } from "../services/auth.services";
-import type { Credentials } from "../../types/auth.types";
+import type { Credentials, RegisterCredentials } from "../../types/auth.types";
 
 export const userRegister = createAsyncThunk(
     "user/register",
-    async (
-        userData: {
-            name: string;
-            email: string;
-            password: string;
-            passwordConfirm: string;
-        },
-        { rejectWithValue }
-    ) => {
+    async (userData: RegisterCredentials, { rejectWithValue }) => {
         try {
             const response = await userRegisterService(userData);
             return response;
