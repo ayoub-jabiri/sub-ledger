@@ -3,6 +3,8 @@ import { useState } from "react";
 import { Link } from "react-router";
 import CardStack from "../../components/auth/CardStack";
 import type { RegisterCredentials } from "../../types/auth.types";
+import { userRegister } from "../../store/slices/auth.slice";
+import { useAppDispatch } from "../../hooks";
 
 const focusRing =
     "focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-[#7255D8]/40";
@@ -32,16 +34,33 @@ function LogoMark({ className = "", size = 20 }) {
 }
 
 export default function RegisterPage() {
+    const dispatch = useAppDispatch();
+
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
         useState(false);
 
-    const [userData, setUserData] = useState<RegisterCredentials>({
-        name: "",
-        email: "",
-        password: "",
-        confirmPassword: "",
-    });
+    const [registerCredentials, setRegisterCredentials] =
+        useState<RegisterCredentials>({
+            name: "",
+            email: "",
+            password: "",
+            confirmPassword: "",
+        });
+
+    function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
+        const { name, value } = event.target;
+        setRegisterCredentials((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+    }
+
+    function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault();
+
+        dispatch(userRegister(registerCredentials));
+    }
 
     return (
         <main className="flex min-h-[100dvh] bg-white font-[Inter,system-ui,sans-serif] text-[#171A2B] antialiased">
@@ -91,7 +110,7 @@ export default function RegisterPage() {
                         services.
                     </p>
 
-                    <form className="mt-6">
+                    <form className="mt-6" onSubmit={handleSubmit}>
                         <div className="space-y-5">
                             <div>
                                 <label htmlFor="name" className={labelClass}>
@@ -101,13 +120,9 @@ export default function RegisterPage() {
                                     type="text"
                                     className={inputClass}
                                     placeholder="Enter your full name"
-                                    value={userData.name}
-                                    onChange={(e) =>
-                                        setUserData({
-                                            ...userData,
-                                            name: e.target.value,
-                                        })
-                                    }
+                                    value={registerCredentials.name}
+                                    name="name"
+                                    onChange={handleChange}
                                 />
                             </div>
 
@@ -120,13 +135,9 @@ export default function RegisterPage() {
                                     autoComplete="email"
                                     className={inputClass}
                                     placeholder="Enter your email"
-                                    value={userData.email}
-                                    onChange={(e) =>
-                                        setUserData({
-                                            ...userData,
-                                            email: e.target.value,
-                                        })
-                                    }
+                                    value={registerCredentials.email}
+                                    name="email"
+                                    onChange={handleChange}
                                 />
                             </div>
 
@@ -146,13 +157,9 @@ export default function RegisterPage() {
                                         }
                                         className={`${inputClass} pr-12`}
                                         placeholder="Enter your password"
-                                        value={userData.password}
-                                        onChange={(e) =>
-                                            setUserData({
-                                                ...userData,
-                                                password: e.target.value,
-                                            })
-                                        }
+                                        value={registerCredentials.password}
+                                        name="password"
+                                        onChange={handleChange}
                                     />
                                     <button
                                         type="button"
@@ -196,13 +203,11 @@ export default function RegisterPage() {
                                         }
                                         className={`${inputClass} pr-12`}
                                         placeholder="Enter your password"
-                                        value={userData.confirmPassword}
-                                        onChange={(e) =>
-                                            setUserData({
-                                                ...userData,
-                                                confirmPassword: e.target.value,
-                                            })
+                                        name="confirmPassword"
+                                        value={
+                                            registerCredentials.confirmPassword
                                         }
+                                        onChange={handleChange}
                                     />
                                     <button
                                         type="button"
