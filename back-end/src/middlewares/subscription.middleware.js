@@ -40,14 +40,17 @@ export const subCheck = async (req, res, next) => {
     const { id } = req.params;
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
-        errorResponse(res, 400, "Invalid ID format");
+        return errorResponse(res, 400, "Invalid ID format");
     }
 
     try {
-        const sub = await Subscription.find({ _id: id });
+        const sub = await Subscription.findOne({
+            _id: id,
+            userId: req.user.id,
+        });
 
-        if (!sub.length) {
-            errorResponse(res, 404, "Subscription not found");
+        if (!sub) {
+            return errorResponse(res, 404, "Subscription not found");
         }
 
         next();

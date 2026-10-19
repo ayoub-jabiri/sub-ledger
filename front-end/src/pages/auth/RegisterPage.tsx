@@ -56,7 +56,7 @@ export default function RegisterPage() {
         }));
     }
 
-    function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    function handleSubmit(e: React.ChangeEvent<HTMLFormElement>) {
         e.preventDefault();
 
         dispatch(userRegister(registerCredentials));

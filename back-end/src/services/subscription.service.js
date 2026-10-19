@@ -5,8 +5,12 @@ export const getUserSubscriptions = (userId) => Subscription.find({ userId });
 export const createSubscription = ({ name, price, billingCycle, userId }) =>
     Subscription.create({ name, price, billingCycle, userId });
 
-export const updateSubscription = async (id, { name, price, billingCycle }) => {
-    const sub = await Subscription.findById(id);
+export const updateSubscription = async (
+    id,
+    userId,
+    { name, price, billingCycle }
+) => {
+    const sub = await Subscription.findOne({ _id: id, userId });
 
     sub.name = name;
     sub.price = price;
@@ -17,6 +21,6 @@ export const updateSubscription = async (id, { name, price, billingCycle }) => {
     return sub;
 };
 
-export const deleteSubscription = async (id) => {
-    await Subscription.findByIdAndDelete(id);
+export const deleteSubscription = async (id, userId) => {
+    await Subscription.findOneAndDelete({ _id: id, userId });
 };

@@ -36,11 +36,15 @@ export const updateSubscription = async (req, res) => {
     const { name, price, billingCycle } = req.body;
 
     try {
-        const sub = await subscriptionService.updateSubscription(id, {
-            name,
-            price,
-            billingCycle,
-        });
+        const sub = await subscriptionService.updateSubscription(
+            id,
+            req.user.id,
+            {
+                name,
+                price,
+                billingCycle,
+            }
+        );
 
         res.json(sub);
     } catch (e) {
@@ -53,7 +57,7 @@ export const deleteSubscription = async (req, res) => {
     const { id } = req.params;
 
     try {
-        await subscriptionService.deleteSubscription(id);
+        await subscriptionService.deleteSubscription(id, req.user.id);
 
         res.json({
             message: "The subscription has been deleted successfully",
