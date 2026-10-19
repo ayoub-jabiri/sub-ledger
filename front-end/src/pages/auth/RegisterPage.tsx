@@ -5,6 +5,7 @@ import CardStack from "../../components/auth/CardStack";
 import type { RegisterCredentials } from "../../types/auth.types";
 import { userRegister } from "../../store/slices/auth.slice";
 import { useAppDispatch } from "../../hooks";
+import SubmitButton from "../../components/global/SubmitButton";
 
 const focusRing =
     "focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-[#7255D8]/40";
@@ -255,13 +256,12 @@ export default function RegisterPage() {
                                 .
                             </span>
                         </label>
-
-                        <button
-                            type="submit"
-                            className={`mt-2 flex h-11 w-full items-center justify-center rounded-lg bg-[#7255D8] text-[15px] font-medium text-white transition-colors hover:bg-[#5B40B8] active:bg-[#4F36A3] ${focusRing}`}
-                        >
-                            Create account
-                        </button>
+                        <SubmitButton
+                            loading={false}
+                            formError={false}
+                            label="Create account"
+                            loadingLabel="Creating account…"
+                        />
                     </form>
 
                     <p className="mt-2 flex flex-wrap items-center justify-center gap-x-1.5 text-sm text-[#6B7088]">
