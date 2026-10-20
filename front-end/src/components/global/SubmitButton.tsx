@@ -30,7 +30,7 @@ export default function SubmitButton({
                         strokeWidth={2}
                         className="animate-spin"
                     />
-                    {loadingLabel}
+                    {loadingLabel} . . .
                 </>
             ) : formError ? (
                 `Try ${loadingLabel} again`

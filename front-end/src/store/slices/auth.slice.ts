@@ -5,7 +5,12 @@ import {
     userLogoutService,
     getUserProfileService,
 } from "../services/auth.services";
-import type { Credentials, RegisterCredentials } from "../../types/auth.types";
+import type {
+    Credentials,
+    SliceErrorResponse,
+    RegisterCredentials,
+    AuthState,
+} from "../../types/auth.types";
 
 export const userRegister = createAsyncThunk(
     "user/register",
@@ -14,7 +19,7 @@ export const userRegister = createAsyncThunk(
             const response = await userRegisterService(userData);
             return response;
         } catch (error: unknown) {
-            const currentError = {
+            const currentError: SliceErrorResponse = {
                 message: error.response?.data?.message || "An error occurred",
                 statusCode: error.response?.status,
             };
@@ -38,7 +43,7 @@ export const userLogin = createAsyncThunk(
 
             return response;
         } catch (error: unknown) {
-            const currentError = {
+            const currentError: SliceErrorResponse = {
                 message: error.response?.data?.message || "An error occurred",
                 statusCode: error.response?.status,
             };
@@ -61,7 +66,7 @@ export const userLogout = createAsyncThunk(
             const response = await userLogoutService();
             return response;
         } catch (error: unknown) {
-            const currentError = {
+            const currentError: SliceErrorResponse = {
                 message: error.response?.data?.message || "An error occurred",
                 statusCode: error.response?.status,
             };
@@ -84,7 +89,7 @@ export const getUserProfile = createAsyncThunk(
             const response = await getUserProfileService();
             return response;
         } catch (error: unknown) {
-            const currentError = {
+            const currentError: SliceErrorResponse = {
                 message: error.response?.data?.message || "An error occurred",
                 statusCode: error.response?.status,
             };
@@ -100,13 +105,15 @@ export const getUserProfile = createAsyncThunk(
     }
 );
 
+const initialState: AuthState = {
+    user: null,
+    loading: false,
+    error: null,
+};
+
 export const authSlice = createSlice({
     name: "auth",
-    initialState: {
-        user: null,
-        loading: false,
-        error: null,
-    },
+    initialState,
     reducers: {},
     extraReducers: (builder) => {
         // Handle user registration actions

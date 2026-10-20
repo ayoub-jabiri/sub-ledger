@@ -1,9 +1,9 @@
-import { Diamond, Eye, EyeOff, Lock } from "lucide-react";
+import { AlertCircle, Diamond, Eye, EyeOff, Lock } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router";
 import CardStack from "../../components/auth/CardStack";
 import { userLogin } from "../../store/slices/auth.slice";
-import { useAppDispatch } from "../../hooks";
+import { useAppDispatch, useAppSelector } from "../../hooks";
 import type { Credentials } from "../../types/auth.types";
 import SubmitButton from "../../components/global/SubmitButton";
 
@@ -34,6 +34,10 @@ function LogoMark({ className = "", size = 20 }) {
 
 export default function LoginPage() {
     const dispatch = useAppDispatch();
+    const { loading, error } = useAppSelector((state) => state.auth);
+
+    console.log("loading ", loading);
+    console.log("error ", error);
 
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     const [credentials, setCredentials] = useState<Credentials>({
@@ -94,6 +98,25 @@ export default function LoginPage() {
                     </p>
 
                     <form className="mt-6" onSubmit={handleSubmit}>
+                        {error && (
+                            <div
+                                role="alert"
+                                className="mb-5 flex gap-3 rounded-lg bg-[#B83B4D]/[0.07] p-3.5"
+                            >
+                                <AlertCircle
+                                    size={18}
+                                    strokeWidth={1.75}
+                                    className="mt-0.5 shrink-0 text-[#B83B4D]"
+                                />
+                                <div>
+                                    <p className="text-sm font-semibold leading-5 text-[#B83B4D]">
+                                        {error.statusCode === 401
+                                            ? "Email or password doesn’t match"
+                                            : `We couldn’t sign you in due to : ${error.message}`}
+                                    </p>
+                                </div>
+                            </div>
+                        )}
                         <div className="space-y-5">
                             <div>
                                 <label
@@ -179,10 +202,10 @@ export default function LoginPage() {
                             </a>
                         </div>
                         <SubmitButton
-                            loading={false}
-                            formError={false}
+                            loading={loading}
+                            formError={Boolean(error)}
                             label="Sign in"
-                            loadingLabel="Signing in…"
+                            loadingLabel="Signing in"
                         />
                     </form>
 
