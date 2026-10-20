@@ -34,7 +34,10 @@ export const loginDataValidation = (req, res, next) => {
     const validation = loginSchema.safeParse(req.body);
 
     if (!validation.success)
-        return res.status(400).json({ errors: validation.error.issues });
+        return res.status(400).json({
+            message: "Validation failed",
+            errors: validation.error.issues,
+        });
 
     req.body = validation.data;
     next();
