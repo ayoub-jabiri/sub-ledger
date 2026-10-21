@@ -5,7 +5,7 @@ const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const api = axios.create({
     baseURL: VITE_API_BASE_URL,
-    timeout: 5000,
+    timeout: 10000,
     withCredentials: true,
 });
 
@@ -14,6 +14,8 @@ api.interceptors.response.use(
         return response.data;
     },
     (error: AxiosError) => {
+        console.log("error", error);
+
         console.error("Response error:", error.response);
 
         if (error.response && error.response.status === 401) {
