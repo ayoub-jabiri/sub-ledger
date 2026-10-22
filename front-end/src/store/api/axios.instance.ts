@@ -11,6 +11,8 @@ const api = axios.create({
 
 api.interceptors.response.use(
     (response: AxiosResponse) => {
+        console.log("response", response.data);
+
         return response.data;
     },
     (error: AxiosError) => {

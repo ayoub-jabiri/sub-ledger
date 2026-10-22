@@ -4,10 +4,9 @@ import type { User as IUser } from "../../types/auth.types";
 
 // Adjust the paths to match your router.
 const NAV_ITEMS = [
-    { to: "/", label: "Overview", icon: LayoutGrid, end: true },
+    { to: "/dashboard", label: "Overview", icon: LayoutGrid },
     { to: "/subscriptions", label: "Subscriptions", icon: Layers },
     { to: "/account", label: "Account", icon: User },
-    { to: "/admin", label: "Admin overview", icon: ShieldCheck },
 ];
 
 const focusRing =
@@ -61,34 +60,29 @@ export default function Sidebar({ user, activeHref }: SidebarProps) {
                     Workspace
                 </p>
                 <ul className="space-y-1">
-                    {NAV_ITEMS.map(({ to, label, icon: Icon, end }) => (
+                    {NAV_ITEMS.map(({ to, label, icon: Icon }) => (
                         <li key={to}>
                             <NavLink
                                 to={to}
-                                end={end}
-                                className={({ isActive }) =>
-                                    `group flex h-11 items-center gap-3 rounded-lg px-3 text-sm transition-colors ${focusRing} ${
-                                        isActive
-                                            ? "bg-white/[0.07] font-semibold text-white"
-                                            : "font-medium text-[#A9AEC4] hover:bg-white/5 hover:text-white"
-                                    }`
-                                }
+                                className={`group flex h-11 items-center gap-3 rounded-lg px-3 text-sm transition-colors ${focusRing} ${
+                                    to === activeHref
+                                        ? "bg-white/[0.07] font-semibold text-white"
+                                        : "font-medium text-[#A9AEC4] hover:bg-white/5 hover:text-white"
+                                }`}
                             >
-                                {({ isActive }) => (
-                                    <>
-                                        <Icon
-                                            size={20}
-                                            strokeWidth={1.75}
-                                            aria-hidden="true"
-                                            className={
-                                                isActive
-                                                    ? "text-[#B9A9F0]"
-                                                    : "text-[#8A8FA8] group-hover:text-white"
-                                            }
-                                        />
-                                        {label}
-                                    </>
-                                )}
+                                <>
+                                    <Icon
+                                        size={20}
+                                        strokeWidth={1.75}
+                                        aria-hidden="true"
+                                        className={
+                                            to === activeHref
+                                                ? "text-white"
+                                                : "text-[#8A8FA8] group-hover:text-white"
+                                        }
+                                    />
+                                    {label}
+                                </>
                             </NavLink>
                         </li>
                     ))}
@@ -104,11 +98,13 @@ export default function Sidebar({ user, activeHref }: SidebarProps) {
                     {initials}
                 </span>
                 <div className="min-w-0">
-                    <p className="truncate text-[13px] font-semibold leading-4 text-white">
-                        {userName}
+                    <p className="truncate text-[13px] font-semibold leading-4 text-white capitalize">
+                        {user?.name || "Unknown User"}
                     </p>
                     <p className="mt-0.5 truncate text-xs leading-4 text-[#8A8FA8]">
-                        {workspaceLabel}
+                        {user?.role == "admin"
+                            ? "Administrator Workspace"
+                            : "Personal Workspace"}
                     </p>
                 </div>
             </div>

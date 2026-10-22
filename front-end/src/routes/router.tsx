@@ -22,7 +22,7 @@ const router = createBrowserRouter([
     {
         path: "dashboard",
         element: (
-            <AppLayout allowedRole="admin" activeHref="/dashboard">
+            <AppLayout allowedRole={["admin", "user"]} activeHref="/dashboard">
                 <DashboardPage />
             </AppLayout>
         ),

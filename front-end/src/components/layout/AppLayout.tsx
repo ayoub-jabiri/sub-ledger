@@ -7,7 +7,7 @@ import PageLoading from "../global/PageLoading";
 import Sidebar from "./Sidebar";
 
 interface AppLayoutProps {
-    allowedRole: string;
+    allowedRole: string[];
     activeHref?: string;
     children: React.ReactNode;
 }
@@ -35,7 +35,7 @@ export default function AppLayout({
         return <PageError message={error.message} />;
     }
 
-    const isAllowed = allowedRole === user?.role;
+    const isAllowed = allowedRole.includes(user?.role || "");
 
     if (!isAllowed) {
         return <NotFoundPage />;
@@ -44,7 +44,7 @@ export default function AppLayout({
     return (
         <>
             <div className="flex max-w-screen">
-                <Sidebar user={user} activeHref={activeHref} />
+                <Sidebar user={user!} activeHref={activeHref} />
                 <div className="flex-1 max-w-full">
                     {/* <Header
                         user={user}

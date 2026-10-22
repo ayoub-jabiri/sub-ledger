@@ -176,7 +176,7 @@ export const authSlice = createSlice({
             })
             .addCase(getUserProfile.fulfilled, (state, action) => {
                 state.loading = false;
-                state.user = action.payload.user;
+                state.user = action.payload;
                 state.error = null;
             })
             .addCase(getUserProfile.rejected, (state, action) => {
