@@ -1,8 +1,8 @@
 import { AlertCircle, Diamond, Eye, EyeOff, Lock } from "lucide-react";
-import { useState } from "react";
-import { Link } from "react-router";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router";
 import CardStack from "../../components/auth/CardStack";
-import { userLogin } from "../../store/slices/auth.slice";
+import { getUserProfile, userLogin } from "../../store/slices/auth.slice";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import type { Credentials } from "../../types/auth.types";
 import SubmitButton from "../../components/global/SubmitButton";
@@ -33,11 +33,25 @@ function LogoMark({ className = "", size = 20 }) {
 }
 
 export default function LoginPage() {
+    const { user, loading, error } = useAppSelector((state) => state.auth);
     const dispatch = useAppDispatch();
-    const { loading, error } = useAppSelector((state) => state.auth);
+    const navigate = useNavigate();
 
+    console.log("user ", user);
     console.log("loading ", loading);
     console.log("error ", error);
+
+    useEffect(() => {
+        if (user) {
+            navigate("/dashboard");
+        } else {
+            dispatch(getUserProfile());
+        }
+    }, [navigate, dispatch, user]);
+
+
+
+
 
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     const [credentials, setCredentials] = useState<Credentials>({
