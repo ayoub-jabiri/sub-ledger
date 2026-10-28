@@ -49,10 +49,6 @@ export default function LoginPage() {
         }
     }, [navigate, dispatch, user]);
 
-
-
-
-
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     const [credentials, setCredentials] = useState<Credentials>({
         email: "",

@@ -1,10 +1,10 @@
 import { Diamond, Eye, EyeOff, Lock } from "lucide-react";
-import { useState } from "react";
-import { Link } from "react-router";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router";
 import CardStack from "../../components/auth/CardStack";
 import type { RegisterCredentials } from "../../types/auth.types";
-import { userRegister } from "../../store/slices/auth.slice";
-import { useAppDispatch } from "../../hooks";
+import { getUserProfile, userRegister } from "../../store/slices/auth.slice";
+import { useAppDispatch, useAppSelector } from "../../hooks";
 import SubmitButton from "../../components/global/SubmitButton";
 
 const focusRing =
@@ -35,7 +35,17 @@ function LogoMark({ className = "", size = 20 }) {
 }
 
 export default function RegisterPage() {
+    const { user } = useAppSelector((state) => state.auth);
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (user) {
+            navigate("/dashboard");
+        } else {
+            dispatch(getUserProfile());
+        }
+    }, [navigate, dispatch, user]);
 
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
