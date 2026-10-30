@@ -46,17 +46,19 @@ export default function Sidebar({ user, activeHref }: SidebarProps) {
     return (
         <aside
             aria-label="Primary"
-            className="sticky top-0 flex h-[100dvh] w-[232px] shrink-0 flex-col bg-[#171A2B]"
+            className="sticky top-0 hidden h-[100dvh] w-20 shrink-0 flex-col bg-[#171A2B] md:flex lg:w-[232px]"
         >
             {/* Brand */}
-            <div className="flex h-16 items-center gap-2 px-5 text-white">
+            <div className="flex h-16 items-center gap-2 px-5 text-white md:justify-center lg:justify-start">
                 <LogoMark className="text-[#B9A9F0]" size={20} />
-                <span className="text-lg font-semibold">SubLedger</span>
+                <span className="hidden text-lg font-semibold lg:inline">
+                    SubLedger
+                </span>
             </div>
 
             {/* Navigation */}
             <nav className="mt-4 flex-1 px-4">
-                <p className="px-3 pb-2 text-[11px] font-medium uppercase tracking-wider text-[#8A8FA8]">
+                <p className="hidden px-3 pb-2 text-[11px] font-medium uppercase tracking-wider text-[#8A8FA8] lg:block">
                     Workspace
                 </p>
                 <ul className="space-y-1">
@@ -64,7 +66,8 @@ export default function Sidebar({ user, activeHref }: SidebarProps) {
                         <li key={to}>
                             <NavLink
                                 to={to}
-                                className={`group flex h-11 items-center gap-3 rounded-lg px-3 text-sm transition-colors ${focusRing} ${
+                                title={label}
+                                className={`group flex h-11 items-center gap-3 rounded-lg px-3 text-sm transition-colors md:justify-center lg:justify-start ${focusRing} ${
                                     to === activeHref
                                         ? "bg-white/[0.07] font-semibold text-white"
                                         : "font-medium text-[#A9AEC4] hover:bg-white/5 hover:text-white"
@@ -81,7 +84,9 @@ export default function Sidebar({ user, activeHref }: SidebarProps) {
                                                 : "text-[#8A8FA8] group-hover:text-white"
                                         }
                                     />
-                                    {label}
+                                    <span className="hidden lg:inline">
+                                        {label}
+                                    </span>
                                 </>
                             </NavLink>
                         </li>
@@ -90,14 +95,14 @@ export default function Sidebar({ user, activeHref }: SidebarProps) {
             </nav>
 
             {/* User */}
-            <div className="flex items-center gap-3 px-6 py-5">
+            <div className="flex items-center gap-3 px-6 py-5 md:justify-center md:px-0 lg:justify-start lg:px-6">
                 <span
-                    className="text-xs font-semibold text-[#B9A9F0]"
+                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/[0.07] text-xs font-semibold text-[#B9A9F0]"
                     aria-hidden="true"
                 >
                     {initials}
                 </span>
-                <div className="min-w-0">
+                <div className="hidden min-w-0 lg:block">
                     <p className="truncate text-[13px] font-semibold leading-4 text-white capitalize">
                         {user?.name || "Unknown User"}
                     </p>

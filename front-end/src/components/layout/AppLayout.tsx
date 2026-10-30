@@ -4,6 +4,7 @@ import NotFoundPage from "../../pages/NotFoundPage";
 import { getUserProfile } from "../../store/slices/auth.slice";
 import PageError from "../global/PageError";
 import PageLoading from "../global/PageLoading";
+import BottomNav from "./BottomNav";
 import Sidebar from "./Sidebar";
 
 interface AppLayoutProps {
@@ -43,18 +44,13 @@ export default function AppLayout({
 
     return (
         <>
-            <div className="flex max-w-screen">
+            <div className="flex w-full">
                 <Sidebar user={user!} activeHref={activeHref} />
-                <div className="flex-1 max-w-full">
-                    {/* <Header
-                        user={user}
-                        openSidebar={() => setIsSidebarOpen(true)}
-                    /> */}
-                    <main className="md:max-w-[calc(100vw-280px)]">
-                        {children}
-                    </main>
+                <div className="min-w-0 flex-1">
+                    <main className="pb-16 md:pb-0">{children}</main>
                 </div>
             </div>
+            <BottomNav activeHref={activeHref} />
         </>
     );
 }
