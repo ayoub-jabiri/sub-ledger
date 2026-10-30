@@ -5,6 +5,8 @@ import RegisterPage from "../pages/auth/RegisterPage";
 import NotFoundPage from "../pages/NotFoundPage";
 import AppLayout from "../components/layout/AppLayout";
 import DashboardPage from "../pages/dashboard/DashboardPage";
+import SubscriptionsPage from "../pages/subscriptions/SubscriptionsPage";
+import AccountPage from "../pages/account/AccountPage";
 
 const router = createBrowserRouter([
     {
@@ -24,6 +26,22 @@ const router = createBrowserRouter([
         element: (
             <AppLayout allowedRole={["admin", "user"]} activeHref="/dashboard">
                 <DashboardPage />
+            </AppLayout>
+        ),
+    },
+    {
+        path: "subscriptions",
+        element: (
+            <AppLayout allowedRole={["admin", "user"]} activeHref="/subscriptions">
+                <SubscriptionsPage />
+            </AppLayout>
+        ),
+    },
+    {
+        path: "account",
+        element: (
+            <AppLayout allowedRole={["admin", "user"]} activeHref="/account">
+                <AccountPage />
             </AppLayout>
         ),
     },
