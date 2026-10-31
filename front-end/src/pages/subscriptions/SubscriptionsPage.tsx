@@ -11,7 +11,7 @@ import type {
     SubscriptionPayload,
 } from "../../types/subscription.types";
 import PageError from "../../components/global/PageError";
-import SubscriptionsHeader from "../../components/subscriptions/SubscriptionsHeader";
+import AppHeader from "../../components/layout/AppHeader";
 import SubscriptionsSummary from "../../components/subscriptions/SubscriptionsSummary";
 import SubscriptionsToolbar from "../../components/subscriptions/SubscriptionsToolbar";
 import SubscriptionsTable from "../../components/subscriptions/SubscriptionsTable";
@@ -112,7 +112,11 @@ export default function SubscriptionsPage() {
 
     return (
         <div className="min-h-screen bg-[#F7F7FA] text-[#171A2B]">
-            <SubscriptionsHeader onAddClick={openAddModal} />
+            <AppHeader
+                eyebrow="Workspace / Subscriptions"
+                title="Subscriptions"
+                action={{ label: "Add subscription", onClick: openAddModal }}
+            />
 
             <div className="space-y-5 p-6 lg:p-8">
                 <SubscriptionsSummary

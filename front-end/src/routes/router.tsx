@@ -32,7 +32,7 @@ const router = createBrowserRouter([
     {
         path: "subscriptions",
         element: (
-            <AppLayout allowedRole={["admin", "user"]} activeHref="/subscriptions">
+            <AppLayout allowedRole={["user"]} activeHref="/subscriptions">
                 <SubscriptionsPage />
             </AppLayout>
         ),

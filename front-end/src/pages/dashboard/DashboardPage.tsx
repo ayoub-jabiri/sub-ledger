@@ -3,12 +3,12 @@ import {
     CalendarDays,
     CircleDollarSign,
     CreditCard,
-    Plus,
     TrendingUp,
     type LucideIcon,
 } from "lucide-react";
 import { useEffect, useMemo } from "react";
 import { Link } from "react-router";
+import AppHeader from "../../components/layout/AppHeader";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { getSubscriptions } from "../../store/slices/subscription.slice";
 import type { Subscription } from "../../types/subscription.types";
@@ -74,25 +74,16 @@ export default function DashboardPage() {
 
     return (
         <div className="min-h-screen bg-[#F7F7FA] text-[#171A2B]">
-            <header className="flex items-center justify-between border-b border-[#E8E8F0] bg-white px-6 py-5 lg:px-8">
-                <div>
-                    <p className="text-xs font-medium text-[#8A8FA8]">
-                        {new Date().toLocaleDateString(undefined, {
-                            weekday: "long",
-                            year: "numeric",
-                            month: "long",
-                            day: "numeric",
-                        })}
-                    </p>
-                    <h1 className="mt-1 text-2xl font-semibold">Your subscriptions, in focus</h1>
-                </div>
-                <Link
-                    to="/subscriptions"
-                    className="hidden h-10 items-center gap-2 rounded-lg bg-[#7255D8] px-4 text-sm font-semibold text-white transition-colors hover:bg-[#5B40B8] sm:flex"
-                >
-                    <Plus size={16} /> Add subscription
-                </Link>
-            </header>
+            <AppHeader
+                eyebrow={new Date().toLocaleDateString(undefined, {
+                    weekday: "long",
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                })}
+                title="Your subscriptions, in focus"
+                action={{ label: "Add subscription", to: "/subscriptions" }}
+            />
 
             <div className="space-y-5 p-6 lg:p-8">
                 <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -112,7 +103,9 @@ export default function DashboardPage() {
                     <SummaryCard
                         icon={TrendingUp}
                         label="Yearly estimate"
-                        value={loading ? "…" : `$${(monthlyTotal * 12).toFixed(2)}`}
+                        value={
+                            loading ? "…" : `$${(monthlyTotal * 12).toFixed(2)}`
+                        }
                         detail="Based on current plans"
                     />
                     <SummaryCard
@@ -128,7 +121,10 @@ export default function DashboardPage() {
                         <ArrowUpRight size={17} />
                         <span>
                             You don't have any subscriptions yet.{" "}
-                            <Link to="/subscriptions" className="font-semibold underline">
+                            <Link
+                                to="/subscriptions"
+                                className="font-semibold underline"
+                            >
                                 Add your first one
                             </Link>
                             .
@@ -136,8 +132,14 @@ export default function DashboardPage() {
                     </div>
                 ) : (
                     <section className="grid gap-5 lg:grid-cols-2">
-                        <SubscriptionList title="Recently added" items={recentlyAdded} />
-                        <SubscriptionList title="Highest spend" items={sortedByPrice} />
+                        <SubscriptionList
+                            title="Recently added"
+                            items={recentlyAdded}
+                        />
+                        <SubscriptionList
+                            title="Highest spend"
+                            items={sortedByPrice}
+                        />
                     </section>
                 )}
             </div>
@@ -145,38 +147,85 @@ export default function DashboardPage() {
     );
 }
 
-function SummaryCard({ icon: Icon, label, value, detail, accent = false }: { icon: LucideIcon; label: string; value: string; detail: string; accent?: boolean }) {
+function SummaryCard({
+    icon: Icon,
+    label,
+    value,
+    detail,
+    accent = false,
+}: {
+    icon: LucideIcon;
+    label: string;
+    value: string;
+    detail: string;
+    accent?: boolean;
+}) {
     return (
         <div className="rounded-xl border border-[#E8E8F0] bg-white p-5">
-            <div className="flex items-center gap-2 text-xs text-[#8A8FA8]"><Icon size={15} />{label}</div>
-            <p className={`mt-4 text-2xl font-semibold ${accent ? "text-[#7255D8]" : ""}`}>{value}</p>
+            <div className="flex items-center gap-2 text-xs text-[#8A8FA8]">
+                <Icon size={15} />
+                {label}
+            </div>
+            <p
+                className={`mt-4 text-2xl font-semibold ${
+                    accent ? "text-[#7255D8]" : ""
+                }`}
+            >
+                {value}
+            </p>
             <p className="mt-1 text-xs text-[#8A8FA8]">{detail}</p>
         </div>
     );
 }
 
-function SubscriptionList({ title, items }: { title: string; items: Subscription[] }) {
+function SubscriptionList({
+    title,
+    items,
+}: {
+    title: string;
+    items: Subscription[];
+}) {
     return (
         <div className="rounded-xl border border-[#E8E8F0] bg-white p-5">
             <div className="flex items-center justify-between">
                 <h2 className="font-semibold">{title}</h2>
-                <Link to="/subscriptions" className="text-xs font-semibold text-[#7255D8]">View all</Link>
+                <Link
+                    to="/subscriptions"
+                    className="text-xs font-semibold text-[#7255D8]"
+                >
+                    View all
+                </Link>
             </div>
             <div className="mt-4 divide-y divide-[#F0EFF6]">
                 {items.length === 0 && (
-                    <p className="py-3 text-xs text-[#8A8FA8]">Nothing to show yet.</p>
+                    <p className="py-3 text-xs text-[#8A8FA8]">
+                        Nothing to show yet.
+                    </p>
                 )}
                 {items.map((item, index) => (
-                    <div key={item._id} className="flex items-center gap-3 py-3 first:pt-0 last:pb-0">
-                        <span className={`flex h-8 w-8 items-center justify-center rounded-lg text-xs font-bold text-white ${avatarColors[index % avatarColors.length]}`}>
+                    <div
+                        key={item._id}
+                        className="flex items-center gap-3 py-3 first:pt-0 last:pb-0"
+                    >
+                        <span
+                            className={`flex h-8 w-8 items-center justify-center rounded-lg text-xs font-bold text-white ${
+                                avatarColors[index % avatarColors.length]
+                            }`}
+                        >
                             {item.name[0]}
                         </span>
                         <div className="min-w-0 flex-1">
-                            <p className="truncate text-sm font-medium">{item.name}</p>
-                            <p className="text-xs capitalize text-[#8A8FA8]">{item.billingCycle}</p>
+                            <p className="truncate text-sm font-medium">
+                                {item.name}
+                            </p>
+                            <p className="text-xs capitalize text-[#8A8FA8]">
+                                {item.billingCycle}
+                            </p>
                         </div>
                         <div className="text-right">
-                            <p className="text-sm font-semibold">${item.price.toFixed(2)}</p>
+                            <p className="text-sm font-semibold">
+                                ${item.price.toFixed(2)}
+                            </p>
                             <p className="text-xs text-[#8A8FA8]">
                                 {new Date(item.createdAt).toLocaleDateString()}
                             </p>

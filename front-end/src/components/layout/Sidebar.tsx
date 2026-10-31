@@ -1,12 +1,22 @@
-import { Diamond, Layers, LayoutGrid, ShieldCheck, User } from "lucide-react";
+import { Diamond, Layers, LayoutGrid, User } from "lucide-react";
 import { NavLink } from "react-router";
 import type { User as IUser } from "../../types/auth.types";
 
 // Adjust the paths to match your router.
 const NAV_ITEMS = [
-    { to: "/dashboard", label: "Overview", icon: LayoutGrid },
-    { to: "/subscriptions", label: "Subscriptions", icon: Layers },
-    { to: "/account", label: "Account", icon: User },
+    {
+        to: "/dashboard",
+        label: "Overview",
+        icon: LayoutGrid,
+        roles: ["admin", "user"],
+    },
+    {
+        to: "/subscriptions",
+        label: "Subscriptions",
+        icon: Layers,
+        roles: ["user"],
+    },
+    { to: "/account", label: "Account", icon: User, roles: ["admin", "user"] },
 ];
 
 const focusRing =
@@ -62,35 +72,40 @@ export default function Sidebar({ user, activeHref }: SidebarProps) {
                     Workspace
                 </p>
                 <ul className="space-y-1">
-                    {NAV_ITEMS.map(({ to, label, icon: Icon }) => (
-                        <li key={to}>
-                            <NavLink
-                                to={to}
-                                title={label}
-                                className={`group flex h-11 items-center gap-3 rounded-lg px-3 text-sm transition-colors md:justify-center lg:justify-start ${focusRing} ${
-                                    to === activeHref
-                                        ? "bg-white/[0.07] font-semibold text-white"
-                                        : "font-medium text-[#A9AEC4] hover:bg-white/5 hover:text-white"
-                                }`}
-                            >
-                                <>
-                                    <Icon
-                                        size={20}
-                                        strokeWidth={1.75}
-                                        aria-hidden="true"
-                                        className={
-                                            to === activeHref
-                                                ? "text-white"
-                                                : "text-[#8A8FA8] group-hover:text-white"
-                                        }
-                                    />
-                                    <span className="hidden lg:inline">
-                                        {label}
-                                    </span>
-                                </>
-                            </NavLink>
-                        </li>
-                    ))}
+                    {NAV_ITEMS.map(({ to, label, icon: Icon, roles }) => {
+                        if (roles && !roles.includes(user?.role || ""))
+                            return null;
+
+                        return (
+                            <li key={to}>
+                                <NavLink
+                                    to={to}
+                                    title={label}
+                                    className={`group flex h-11 items-center gap-3 rounded-lg px-3 text-sm transition-colors md:justify-center lg:justify-start ${focusRing} ${
+                                        to === activeHref
+                                            ? "bg-white/[0.07] font-semibold text-white"
+                                            : "font-medium text-[#A9AEC4] hover:bg-white/5 hover:text-white"
+                                    }`}
+                                >
+                                    <>
+                                        <Icon
+                                            size={20}
+                                            strokeWidth={1.75}
+                                            aria-hidden="true"
+                                            className={
+                                                to === activeHref
+                                                    ? "text-white"
+                                                    : "text-[#8A8FA8] group-hover:text-white"
+                                            }
+                                        />
+                                        <span className="hidden lg:inline">
+                                            {label}
+                                        </span>
+                                    </>
+                                </NavLink>
+                            </li>
+                        );
+                    })}
                 </ul>
             </nav>
 
@@ -106,7 +121,14 @@ export default function Sidebar({ user, activeHref }: SidebarProps) {
                     <p className="truncate text-[13px] font-semibold leading-4 text-white capitalize">
                         {user?.name || "Unknown User"}
                     </p>
-                    <p className="mt-0.5 truncate text-xs leading-4 text-[#8A8FA8]">
+                    <p
+                        className="mt-0.5 truncate text-xs leading-4 text-[#8A8FA8]"
+                        title={
+                            user?.role == "admin"
+                                ? "Administrator Workspace"
+                                : "Personal Workspace"
+                        }
+                    >
                         {user?.role == "admin"
                             ? "Administrator Workspace"
                             : "Personal Workspace"}
